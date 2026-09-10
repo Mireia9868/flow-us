@@ -9,7 +9,7 @@ compatibility_date = "2026-09-01"
 #   npx wrangler kv:namespace create FOCUS_KV
 [[kv_namespaces]]
 binding = "FOCUS_KV"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "2aee4fa72305411398c75104f728956b"
 
 # 可选：若想让 Worker 挂在自有域名 /api/* 下（需先把域名接入 Cloudflare），
 # 取消下面注释并把 zone_name / pattern 改成你的域名。
