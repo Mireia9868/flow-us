@@ -1,0 +1,19 @@
+# flow-us 工作台云同步 Worker
+# 部署：npx wrangler deploy（首次需 npx wrangler login 或设置 CLOUDFLARE_API_TOKEN）
+
+name = "flow-us-sync"
+main = "index.js"
+compatibility_date = "2026-09-01"
+
+# KV 命名空间：创建后把返回的 id 填到这里
+#   npx wrangler kv:namespace create FOCUS_KV
+[[kv_namespaces]]
+binding = "FOCUS_KV"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+# 可选：若想让 Worker 挂在自有域名 /api/* 下（需先把域名接入 Cloudflare），
+# 取消下面注释并把 zone_name / pattern 改成你的域名。
+# 不配 routes 也没关系，Worker 默认会有一个 *.workers.dev 地址可直接用。
+# [[routes]]
+# pattern = "flow-us.com/api/*"
+# zone_name = "flow-us.com"

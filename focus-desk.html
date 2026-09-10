@@ -266,6 +266,9 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
     </div>
     <div class="hd-r" data-page-node-id="iU4FshhbOvIHh4xCQx1lwr">
       <div class="syn" id="syn" data-page-node-id="boju9c3RWJloSrcvEm5fhI"><i data-page-node-id="d3aYF4HC9LvuWU7PFtq7HW"></i><span id="syntx" data-page-node-id="QL1VLWcChPqhmWfAtMvm9s">已同步</span></div>
+      <button class="btn" id="btnSync" title="云同步设置">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>同步
+      </button>
       <button class="btn" id="btnAdd" data-page-node-id="D1yQnB50akLG2VVAMhDo8N">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" data-page-node-id="ncdJtAgmr7UYB1wcmxslz1"><path d="M12 5v14M5 12h14" data-page-node-id="1AusEPQOk0r0LQBO73HmZC"/></svg>新建任务
       </button>
@@ -492,26 +495,50 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
   </div>
 </div>
 
+<!-- 云同步设置 -->
+<div class="mask" id="mSync">
+  <div class="mdl">
+    <h3>云同步设置</h3>
+    <p class="sub" id="scHint">多设备填同一个同步码即可自动同步，数据存你自己的 Cloudflare KV。</p>
+    <div class="fm">
+      <div class="f1">
+        <label>同步码（自定义，建议 8 位以上）</label>
+        <input id="scCode" type="text" placeholder="例如：readdy-2026" autocomplete="off">
+      </div>
+      <div class="f1">
+        <label>API 地址（留空则用同源 /api）</label>
+        <input id="scApi" type="text" placeholder="/api" autocomplete="off">
+      </div>
+      <div class="fm-f">
+        <button class="btn" id="scClose">关闭</button>
+        <button class="btn" id="scPull">立即拉取</button>
+        <button class="btn pri" id="scSave">保存并同步</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="tst" id="tst" data-page-node-id="BOGzUU0d6NKcrAR47pMrW3"></div>
 
 <script>
 "use strict";
 /* ========== 常量与状态 ========== */
-var DB_TASK = "uLWxmA8IbubExFxA6QG1Kf";
-var DB_FOCUS = "cDI08POMBLjqPELXyjPaXI";
-var DB_WOW = "7w0nfWU3HfpszyeFI9cFEv";
 var LS = "wb_focusdesk_";
 var SCENES = ["投放执行","数据分析诊断","周报汇报","对外沟通","个人项目"];
 var SC_COLOR = {"投放执行":"#2f6bff","数据分析诊断":"#7c3aed","周报汇报":"#f59e0b","对外沟通":"#16a34a","个人项目":"#e5484d"};
-var LINES = ["mearsun","Garvee","Antom","OKX","日韩市场","Readdy","个人项目","其他"];
-var LN_COLOR = {"mearsun":"#2f6bff","Garvee":"#7c3aed","Antom":"#f59e0b","OKX":"#16a34a","日韩市场":"#e5484d","Readdy":"#0891b2","个人项目":"#db2777","其他":"#8b95a3"};
+var LINES = ["Readdy-GG","Readdy-其他","个人项目"];
+var LN_COLOR = {"Readdy-GG":"#0891b2","Readdy-其他":"#0d9488","个人项目":"#db2777"};
+/* 云同步：Cloudflare Worker + KV。DEFAULT_API 为同源相对路径，
+   若 Worker 部署在独立子域，在「同步设置」里填完整地址即可（如 https://xxx.workers.dev）*/
+var DEFAULT_API = "/api";
+var API_PATH = "/state";
 
 var state = {
   tasks: [], focus: [], wow: [], curId: "", scene: "全部", line: "全部",
-  mode: "cloud",            // cloud | local
+  mode: "local",            // cloud | local
+  lastAt: 0,
   pm: { min: 25, left: 1500, run: false, timer: null }
 };
-var db = null;
 
 /* ========== 工具 ========== */
 function $(id){ return document.getElementById(id); }
@@ -915,16 +942,44 @@ function refreshAll(){
   renderPm();
 }
 
-/* ========== 数据层 ========== */
-function loadAll(dbId, start, acc, guard){
-  acc=acc||[]; guard=guard||0;
-  if(guard>60) return Promise.resolve(acc);
-  return db.query({databaseId:dbId, pageSize:200, startCursor:start}).then(function(r){
-    acc=acc.concat(r.results||[]);
-    var nx=r.nextCursor;
-    if(r.hasMore && nx && nx!==start && (r.results||[]).length) return loadAll(dbId,nx,acc,guard+1);
-    return acc;
-  });
+/* ========== 数据层（Cloudflare Worker + KV，localStorage 兜底） ========== */
+function apiBase(){
+  var v=localStorage.getItem(LS+"api");
+  if(v===null || v==="") return DEFAULT_API;
+  return String(v).replace(/\/+$/,"");
+}
+function syncCode(){ return localStorage.getItem(LS+"code")||""; }
+function hasSync(){ return !!syncCode() && !!apiBase(); }
+function unwrap(v){
+  if(v===null||v===undefined) return "";
+  if(typeof v==="object"){
+    if(v.text!==undefined) return v.text;
+    if(v.select!==undefined) return v.select;
+    if(v.checkbox!==undefined) return v.checkbox;
+    if(v.date!==undefined) return v.date;
+    if(v.number!==undefined) return v.number;
+    if(v.currency!==undefined) return v.currency;
+    return "";
+  }
+  return v;
+}
+function snap(){
+  return {
+    v:1, updatedAt:Date.now(), curId:state.curId,
+    tasks:state.tasks, focus:state.focus, wow:state.wow,
+    notes:state.tasks.map(function(t){ return {id:t._id,n:t._note||"",a:t._noteAt||""}; })
+  };
+}
+function applySnap(d){
+  if(!d||typeof d!=="object") return false;
+  // 远端快照比本地更旧时拒绝覆盖，避免刚写就被拉回
+  if(d.updatedAt && state.lastAt && d.updatedAt < state.lastAt-2000) return false;
+  state.tasks=d.tasks||[]; state.focus=d.focus||[]; state.wow=d.wow||[];
+  var nm={}; (d.notes||[]).forEach(function(x){ nm[x.id]={n:x.n,a:x.a}; });
+  state.tasks.forEach(function(t){ if(nm[t._id]){ t._note=nm[t._id].n; t._noteAt=nm[t._id].a; } });
+  if(d.curId) state.curId=d.curId;
+  if(d.updatedAt) state.lastAt=d.updatedAt;
+  return true;
 }
 
 function saveLocal(){
@@ -940,75 +995,84 @@ function loadLocal(){
   try{
     var t=JSON.parse(localStorage.getItem(LS+"tasks")||"[]");
     var f=JSON.parse(localStorage.getItem(LS+"focus")||"[]");
+    var w=JSON.parse(localStorage.getItem(LS+"wow")||"[]");
     var n=JSON.parse(localStorage.getItem(LS+"notes")||"[]");
     var nmap={}; n.forEach(function(x){ nmap[x.id]={n:x.n,a:x.a}; });
     t.forEach(function(x){ if(nmap[x._id]){ x._note=nmap[x._id].n; x._noteAt=nmap[x._id].a; } });
-    return {t:t,f:f,cur:localStorage.getItem(LS+"cur")||""};
-  }catch(e){ return {t:[],f:[],cur:""}; }
+    return {t:t,f:f,w:w,cur:localStorage.getItem(LS+"cur")||""};
+  }catch(e){ return {t:[],f:[],w:[],cur:""}; }
 }
 
-function fetchData(){
-  if(state.mode!=="cloud" || !db) return Promise.resolve();
+/* 远端拉取 */
+function pullRemote(){
+  if(!hasSync()) return Promise.reject(new Error("no-config"));
   setSyn("ing","同步中");
-  return Promise.all([ loadAll(DB_TASK), loadAll(DB_FOCUS), loadAll(DB_WOW) ])
-    .then(function(res){
-      state.tasks=res[0]; state.focus=res[1]; state.wow=res[2]||[];
-      // 合并本地备注
-      var nl=[];
-      try{ nl=JSON.parse(localStorage.getItem(LS+"notes")||"[]"); }catch(e){}
-      var nm={}; nl.forEach(function(x){ nm[x.id]={n:x.n,a:x.a}; });
-      state.tasks.forEach(function(t){ if(nm[t._id]){ t._note=nm[t._id].n; t._noteAt=nm[t._id].a; } });
-      var c=localStorage.getItem(LS+"cur");
-      if(c) state.curId=c;
-      if(!state.curId){
-        var l=todayTasks();
-        if(l.length) state.curId=l[0]._id;
-      }
-      setSyn("","已同步");
+  return fetch(apiBase()+API_PATH+"?code="+encodeURIComponent(syncCode()),{method:"GET",headers:{"Accept":"application/json"},cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+    .then(function(j){
+      var d=(j&&j.data!==undefined)?j.data:j;
+      if(d && (d.tasks||d.focus||d.wow) && !applySnap(d)){ setSyn("","已同步"); return; }
+      state.mode="cloud";
       saveLocal();
-    })
-    .catch(function(err){
-      console.error("[focusdesk] 读取失败",err);
-      state.mode="local";
-      var d=loadLocal();
-      state.tasks=d.t; state.focus=d.f; state.curId=d.cur;
-      setSyn("err","离线缓存");
-      $("bntx").textContent="云端读取失败，当前展示本地缓存数据";
-      $("bn").classList.add("on");
+      setSyn("","已同步");
     });
+}
+
+/* 远端推送（防抖合并） */
+var _pt=null;
+function pushRemote(){
+  if(!hasSync()) return Promise.resolve();
+  if(_pt) clearTimeout(_pt);
+  return new Promise(function(res){
+    _pt=setTimeout(function(){
+      _pt=null;
+      setSyn("ing","同步中");
+      var s=snap(); state.lastAt=s.updatedAt;
+      fetch(apiBase()+API_PATH+"?code="+encodeURIComponent(syncCode()),{
+        method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(s)
+      }).then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); setSyn("","已同步"); res(); })
+        .catch(function(){ setSyn("err","同步失败"); res(); });
+    },500);
+  });
+}
+/* 统一写入：改内存 → 落本地 → 推云端 */
+function commit(){ saveLocal(); return pushRemote(); }
+
+/* 保留旧名，兼容既有调用点 */
+function fetchData(){
+  if(!hasSync()){ state.mode="local"; return Promise.resolve(); }
+  return pullRemote().catch(function(err){
+    state.mode="local";
+    setSyn("err","同步失败");
+    $("bntx").textContent="云端同步失败，当前展示本地数据";
+    $("bn").classList.add("on");
+  });
 }
 
 function pushTask(props, id){
   var p={};
   for(var k in props){ if(props[k]!==undefined && props[k]!==null) p[k]=props[k]; }
-  if(state.mode==="cloud" && db){
-    if(id) return db.updateRecord({databaseId:DB_TASK, recordId:id, properties:p});
-    return db.addRecord({databaseId:DB_TASK, properties:p});
-  }
-  // 本地模式
   if(id){
-    for(var i=0;i<state.tasks.length;i++){ if(state.tasks[i]._id===id){ for(var k2 in p){ state.tasks[i][k2]=p[k2].text!==undefined?p[k2].text:(p[k2].select!==undefined?p[k2].select:(p[k2].checkbox!==undefined?p[k2].checkbox:(p[k2].date!==undefined?p[k2].date:""))); } break; } }
+    for(var i=0;i<state.tasks.length;i++){
+      if(state.tasks[i]._id===id){ for(var k2 in p){ state.tasks[i][k2]=unwrap(p[k2]); } break; }
+    }
   }else{
-    var o={_id:"loc_"+Date.now()+"_"+Math.random().toString(36).slice(2,7)};
-    for(var k3 in p){ o[k3]=p[k3].text!==undefined?p[k3].text:(p[k3].select!==undefined?p[k3].select:(p[k3].checkbox!==undefined?p[k3].checkbox:(p[k3].date!==undefined?p[k3].date:""))); }
+    var o={_id:"l_"+Date.now()+"_"+Math.random().toString(36).slice(2,7)};
+    for(var k3 in p){ o[k3]=unwrap(p[k3]); }
     state.tasks.push(o);
   }
-  saveLocal();
-  return Promise.resolve({});
+  return commit();
 }
 function delTask(id){
-  if(state.mode==="cloud" && db) return db.deleteRecord({databaseId:DB_TASK, recordId:id});
   state.tasks=state.tasks.filter(function(t){return t._id!==id;});
-  saveLocal();
-  return Promise.resolve({});
+  if(state.curId===id) state.curId="";
+  return commit();
 }
 function pushFocus(props){
-  if(state.mode==="cloud" && db) return db.addRecord({databaseId:DB_FOCUS, properties:props});
-  var o={_id:"locf_"+Date.now()};
-  for(var k in props){ o[k]=props[k].text!==undefined?props[k].text:(props[k].select!==undefined?props[k].select:(props[k].number!==undefined?props[k].number:(props[k].date!==undefined?props[k].date:""))); }
+  var o={_id:"f_"+Date.now()+"_"+Math.random().toString(36).slice(2,6)};
+  for(var k in props){ o[k]=unwrap(props[k]); }
   state.focus.push(o);
-  saveLocal();
-  return Promise.resolve({});
+  return commit();
 }
 
 /* ========== 事件层 ========== */
@@ -1162,26 +1226,15 @@ $("wSave").onclick=function(){
     var r=state.wow[i];
     if(r["业务线"]===line && dOf(r["周起始日"])===wk){ exist=r; break; }
   }
-  var props={"业务线":{select:line},"周起始日":{date:wk},"费用":{currency:cost},"Leads":{number:leads}};
   var p;
   if(exist){
-    if(state.mode==="cloud" && db){
-      p=db.updateRecord({databaseId:DB_WOW, recordId:exist._id, properties:props});
-    }else{
-      for(var k in props){ exist[k]=props[k].currency!==undefined?props[k].currency:(props[k].number!==undefined?props[k].number:(props[k].select!==undefined?props[k].select:props[k].date)); }
-      p=Promise.resolve({});
-    }
+    exist["业务线"]=line; exist["周起始日"]=wk; exist["费用"]=cost; exist["Leads"]=leads;
+    p=commit();
   }else{
-    if(state.mode==="cloud" && db){
-      p=db.addRecord({databaseId:DB_WOW, properties:props});
-    }else{
-      var o={_id:"locw_"+Date.now(),"业务线":line,"周起始日":wk,"费用":cost,"Leads":leads};
-      state.wow.push(o); saveLocal();
-      p=Promise.resolve({});
-    }
+    state.wow.push({_id:"w_"+Date.now()+"_"+Math.random().toString(36).slice(2,6),"业务线":line,"周起始日":wk,"费用":cost,"Leads":leads});
+    p=commit();
   }
-  p.then(function(){ return fetchData(); })
-   .then(function(){ refreshAll(); toast(exist?"已更新本周数据":"已保存本周数据"); })
+  p.then(function(){ refreshAll(); toast(exist?"已更新本周数据":"已保存本周数据"); })
    .catch(function(){ refreshAll(); toast("保存失败，请检查网络"); });
 };
 
@@ -1270,10 +1323,42 @@ $("btnExport").onclick=function(){
 };
 $("bnx").onclick=function(){ $("bn").classList.remove("on"); };
 
+/* 云同步设置 */
+function renderSyncCfg(){
+  if(!$("scCode")) return;
+  $("scCode").value=syncCode();
+  $("scApi").value=localStorage.getItem(LS+"api")||"";
+}
+$("btnSync").onclick=function(){ renderSyncCfg(); $("mSync").classList.add("on"); };
+$("scClose").onclick=function(){ $("mSync").classList.remove("on"); };
+$("mSync").onclick=function(e){ if(e.target===this) this.classList.remove("on"); };
+$("scPull").onclick=function(){
+  if(!hasSync()){ toast("请先填写同步码并保存"); return; }
+  pullRemote().then(function(){ refreshAll(); toast("已拉取云端数据"); })
+              .catch(function(){ toast("拉取失败，检查同步码与 API 地址"); });
+};
+$("scSave").onclick=function(){
+  var code=$("scCode").value.trim(), api=$("scApi").value.trim();
+  if(!code){ toast("同步码不能为空"); return; }
+  localStorage.setItem(LS+"code",code);
+  localStorage.setItem(LS+"api",api);
+  state.mode="cloud";
+  $("mSync").classList.remove("on");
+  pullRemote().then(function(){
+    refreshAll();
+    if(!state.tasks.length){ seedLocal(); refreshAll(); }
+    return commit();
+  }).then(function(){ toast("已开启云同步"); })
+    .catch(function(){
+      state.mode="cloud";
+      commit().then(function(){ toast("已保存，本地数据正在上传"); });
+    });
+};
+
 /* ========== 初始化（防御性：单一入口） ========== */
 function initSelects(){
   var opt=LINES.map(function(l){ return '<option value="'+l+'">'+l+'</option>'; }).join("");
-  $("fLine").innerHTML='<option value="其他" selected>其他</option>'+opt;
+  $("fLine").innerHTML=opt;
   $("wLine").innerHTML=opt;
   $("wDate").value=weekStart();
 }
@@ -1281,48 +1366,43 @@ function initSelects(){
 function init(){
   initSelects();
   var d=loadLocal();
-  state.tasks=d.t; state.focus=d.f; state.curId=d.cur;
-  try{ var lw=JSON.parse(localStorage.getItem(LS+"wow")||"[]"); if(lw.length) state.wow=lw; }catch(e){}
+  state.tasks=d.t; state.focus=d.f; state.wow=d.w; state.curId=d.cur;
   refreshAll();                                  // 先用本地缓存渲染，避免白屏
+  if(!state.tasks.length){ seedLocal(); refreshAll(); }
+  if(!state.curId){ var l=todayTasks(); if(l.length) state.curId=l[0]._id; refreshAll(); }
 
-  var hasDb = (window.__SMART_PAGE__ && window.__SMART_PAGE__.database);
-  if(hasDb){
-    db = window.__SMART_PAGE__.database;
+  if(hasSync()){
     state.mode="cloud";
-    fetchData().then(function(){ refreshAll(); }).catch(function(){ refreshAll(); });
-    if(typeof db.onUpdated==="function"){
-      var _t=null;
-      db.onUpdated(function(p){
-        var ids=(p&&p.databaseIds)||[];
-        if(ids.indexOf(DB_TASK)===-1 && ids.indexOf(DB_FOCUS)===-1 && ids.indexOf(DB_WOW)===-1) return;
-        clearTimeout(_t);
-        _t=setTimeout(function(){ fetchData().then(function(){refreshAll();}); },400);
+    pullRemote().then(function(){ refreshAll(); })
+      .catch(function(){
+        state.mode="local";
+        setSyn("err","同步失败");
+        $("bntx").textContent="云端同步失败，当前展示本地数据";
+        $("bn").classList.add("on");
       });
-    }
   }else{
     state.mode="local";
     setSyn("off","本地模式");
-    $("bntx").textContent="当前为本地模式，数据仅存本设备浏览器，建议定期导出备份";
+    $("bntx").textContent="未开启云同步，数据仅存本设备。点右上角同步按钮可开启多设备同步";
     $("bn").classList.add("on");
-    if(!state.tasks.length){ seedLocal(); }
-    refreshAll();
   }
+  renderSyncCfg();
 }
 
-/* 本地模式下无数据才播撒示例（云端模式示例已由服务端预置） */
+/* 首次打开播撒示例任务（含 1 条逾期），可一键清空 */
 function seedLocal(){
   var td=today();
-  var mk=function(n,sc,pr,due,td2,note,st){
-    return {_id:"loc_"+Math.random().toString(36).slice(2,9),"任务":n,"场景":sc,"状态":st||"待办","优先级":pr,"截止日期":due,"今日处理":td2,"备注":note};
+  var mk=function(n,sc,pr,due,td2,note,st,line){
+    return {_id:"l_"+Math.random().toString(36).slice(2,9),"任务":n,"场景":sc,"状态":st||"待办","优先级":pr,"截止日期":due,"今日处理":td2,"业务线":line,"备注":note};
   };
   var y=new Date(); y.setDate(y.getDate()-2);
   var ys=y.getFullYear()+"-"+p2(y.getMonth()+1)+"-"+p2(y.getDate());
   state.tasks=[
-    mk("Garvee MS Ads 转化修复跟进（UET 标签 + 出价）","数据分析诊断","P0",ys,true,"UET 标签疑似未配置，转换 0","进行中"),
-    mk("Mearsun Google Ads 8月加码方案落地","投放执行","P0",td,true,"血压仪 PMax 仍亏损，需明确加码/调整/止损"),
-    mk("Antom 周报 WoW 对比（费用/Leads/CPL）","周报汇报","P1",td,true,"中美双市场关键词清单同步维护"),
-    mk("Readdy domain 购买 + checkout flow 重设","对外沟通","P1",td,false,"对标 Wix/Squarespace/Framer/Lovable"),
-    mk("AI GeoLens /api/analyze 支付校验修复","个人项目","P2",td,false,"PayPal Live 环境变量 + 免费后门漏洞")
+    mk("Readdy GG 搜索词报告清理 + 否定词补录","数据分析诊断","P0",ys,true,"搜索词里无效词占比偏高，需补否定词并核对归因","进行中","Readdy-GG"),
+    mk("Readdy GG PMax 素材组轮换（3 组新图 + 标题）","投放执行","P0",td,true,"素材轮换周期到，含 freewebsite 落地页配套文案","待办","Readdy-GG"),
+    mk("Readdy 本周 WoW 复盘（费用 / Leads / CPL）","周报汇报","P1",td,true,"对比上周，标注异动与判断","待办","Readdy-GG"),
+    mk("Readdy CPL 落地页 CAPI 事件质量核对","对外沟通","P1",shiftDay(td,2),false,"event match quality 偏低，与工程确认参数回传","待办","Readdy-GG"),
+    mk("AI GeoLens 支付校验修复","个人项目","P2",shiftDay(td,5),false,"PayPal Live 环境变量配置 + 免费后门修复","待办","个人项目")
   ];
   state.curId=state.tasks[0]._id;
   saveLocal();
