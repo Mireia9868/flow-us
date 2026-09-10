@@ -765,7 +765,7 @@ function renderProjects(){
     var pct=st.all? Math.round(st.done/st.all*100) : 0;
     var due=dOf(p["目标日期"]), dl="";
     if(due){
-      var left=dayDiff(due,today());
+      var left=dayDiff(today(),due);   // 正数=还剩几天，负数=已逾期
       dl = left<0 ? ('<span class="prj-ddl od">逾期 '+Math.abs(left)+' 天</span>')
          : left===0 ? '<span class="prj-ddl od">今天到期</span>'
          : '<span class="prj-ddl">剩 '+left+' 天 · '+due.slice(5)+'</span>';
@@ -814,7 +814,7 @@ function renderToday(){
   }
   var h="";
   list.forEach(function(t){
-    var od2=isOverdue(t), d=dOf(t["截止日期"]), diff=dayDiff(d,today());
+    var od2=isOverdue(t), d=dOf(t["截止日期"]), diff=dayDiff(today(),d);
     var dt = od2 ? ("逾期 "+Math.abs(diff)+" 天") : (d===today()?"今天截止":(diff>0?diff+" 天后截止":d||"无截止"));
     h+='<div class="ti">'
       +'<div class="ti-ic'+(od2?" od":"")+'">'

@@ -48,16 +48,28 @@ Antom、Garvee、mearsun、Sublue、OKX、日韩市场已全部移除。任务�
 - 渲染层单向调用链，8 个 render 函数互不调用，统一 `refreshAll()` 调度
 - 响应式：PC 双栏 / 手机单列，按钮 ≥44px，输入框 16px，适配 iPhone 底部安全区
 
-## 六、待办（需要你操作）
+## 六、已上线状态（2026-09-09）
 
-1. Cloudflare Pages 连接 `Mireia9868/flow-us` 仓库，绑定 `flow-us.com`
-2. 把域名的 NS 从 Wix 改到 Cloudflare（CF 控制台会给出具体 NS 地址）
-3. 部署 Worker：`cd worker && npx wrangler deploy`（需先建 KV namespace）
-4. 打开 flow-us.com → 右上角「同步」→ 填同步码和 Worker 地址
+| 项 | 状态 |
+|---|---|
+| 线上地址 | **https://www.flow-us.com**（裸域 flow-us.com 待域名转出 Wix 后可用） |
+| Pages 项目 | `flow-us`，`./deploy.sh` 一键部署 |
+| 同步 Worker | https://flow-us-sync.mireia9868.workers.dev |
+| KV | `FOCUS_KV` = `2aee4fa72305411398c75104f728956b` |
+| 代码仓库 | https://github.com/Mireia9868/flow-us（私有） |
 
-详细命令见 README「部署」章节。
+## 七、项目进度模块（阶段目标管理）
 
-## 七、注意事项
+- **项目模型**：名称 / 有序阶段清单 / 当前阶段 / 目标日期 / **可验收成功标准**
+- **卡片呈现**：阶段 N/M + 完成度进度条 + 任务 x/y + DDL 倒计时（逾期标红）+ 成功标准
+- **推进**：点阶段胶囊前进一阶段，走到最后一段自动放烟花
+- **任务归属**：新建任务可挂到项目；项目行 `+` 按钮直接带着归属开新建
+- **专注上下文**：专注卡顶部显示「项目名 · 阶段 N/M · 当前阶段名 · 完成度」
+- **周报**：新增「项目阶段进展」段落
+
+设计纪律：每个项目必须写**可验收的成功标准**（带数字），否则只是任务分组，不是目标管理。
+
+## 八、注意事项
 
 - 同步码是数据隔离钥匙，**不是加密**。别用简单码，别分享
 - 数据明文存在 Cloudflare KV，不要写入客户名单、合同金额等敏感信息
