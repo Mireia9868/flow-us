@@ -352,20 +352,9 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
     <button id="bnx" data-page-node-id="VM93Ey5J0bl2S4D6KK1wFg">知道了</button>
   </div>
 
-  <!-- 今天要处理 -->
-  <section class="today" data-page-node-id="aemSz34s3LGEsAL8CDVfeo">
-    <div class="today-h" data-page-node-id="NvltGsW3dgjEECJcD8z6iG">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#e5484d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="OWuyfqJAOfqro48kPXJDFn"><circle cx="12" cy="12" r="9" data-page-node-id="gp8dwLaU6HtH9MsAabHa1k"/><path d="M12 7v5l3 2" data-page-node-id="dnWEEsL3hruz5MNhwL6Nxm"/></svg>
-      <h2 data-page-node-id="IqPJYXc8NX6kHjWzspPeWz">今天要处理</h2>
-      <span class="cnt" id="todayCnt" data-page-node-id="JBQ6utQKqH67r5e84K2kBo">0</span>
-    </div>
-    <div class="today-b" id="todayList" data-page-node-id="eMbk61PrXSN2FRdE89URSc"></div>
-  </section>
-
-  <div class="grid" data-page-node-id="iosdQWRLCbG97iy3hmUEMv">
-    <!-- 左：专注主区 -->
-    <div data-page-node-id="ZVWacTXVdtYnBhfWwAe5MT">
-      <section class="card" data-page-node-id="x6e9AnQm5EEdkTOQGOoCmg">
+  
+  <!-- 当前专注（置顶固定） -->
+<section class="card focus-pin" data-page-node-id="x6e9AnQm5EEdkTOQGOoCmg">
         <div class="card-h" data-page-node-id="ydO0NYfvWCmLnnHBrTFk4K">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2f6bff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="fGk60N2Q89T2KmYnWCGcGE"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4z" data-page-node-id="MyMWGf6DGGbVGVZLCgQfSJ"/></svg>
           <h2 data-page-node-id="AlwSybZOqlRoYqWw6BoBVQ">当前专注</h2>
@@ -412,6 +401,20 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
           </div>
         </div>
       </section>
+<!-- 今天要处理 -->
+  <section class="today" data-page-node-id="aemSz34s3LGEsAL8CDVfeo">
+    <div class="today-h" data-page-node-id="NvltGsW3dgjEECJcD8z6iG">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#e5484d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="OWuyfqJAOfqro48kPXJDFn"><circle cx="12" cy="12" r="9" data-page-node-id="gp8dwLaU6HtH9MsAabHa1k"/><path d="M12 7v5l3 2" data-page-node-id="dnWEEsL3hruz5MNhwL6Nxm"/></svg>
+      <h2 data-page-node-id="IqPJYXc8NX6kHjWzspPeWz">今天要处理</h2>
+      <span class="cnt" id="todayCnt" data-page-node-id="JBQ6utQKqH67r5e84K2kBo">0</span>
+    </div>
+    <div class="today-b" id="todayList" data-page-node-id="eMbk61PrXSN2FRdE89URSc"></div>
+  </section>
+
+  <div class="grid" data-page-node-id="iosdQWRLCbG97iy3hmUEMv">
+    <!-- 左：专注主区 -->
+    <div data-page-node-id="ZVWacTXVdtYnBhfWwAe5MT">
+      
 
       <section class="card">
         <div class="card-h">
@@ -1439,33 +1442,41 @@ document.addEventListener("click", function(e){
   if(mn){ pmSet(parseInt(mn.getAttribute("data-min"),10)); return; }
 });
 
-/* 番茄钟 */
-function pmSet(m){ state.pm.min=m; state.pm.left=m*60; state.pm.run=false; clearInterval(state.pm.timer); renderPm(); }
+/* 番茄钟（基于真实时间戳，切到后台也不会少算时间） */
+function pmSet(m){ state.pm.min=m; state.pm.left=m*60; state.pm.run=false; state.pm.endTs=0; clearInterval(state.pm.timer); renderPm(); }
+function pmRemaining(){ return Math.max(0, Math.round((state.pm.endTs - Date.now())/1000)); }
+function pmTick(){
+  if(!state.pm.run) return;
+  state.pm.left = pmRemaining();
+  if(state.pm.left<=0){
+    clearInterval(state.pm.timer); state.pm.run=false; state.pm.left=0; state.pm.endTs=0;
+    var t=findT(state.curId);
+    pushFocus({"日期":{date:today()},"任务":{text:t?t["任务"]:"（未指定）"},"场景":{select:(t&&t["场景"])||"投放执行"},"专注分钟":{number:state.pm.min},"备注":{text:"番茄钟完成"}})
+      .then(function(){ return fetchData(); })
+      .then(function(){ refreshAll(); })
+      .catch(function(){ refreshAll(); });
+    toast("专注完成！已记录 "+state.pm.min+" 分钟");
+    state.pm.left=state.pm.min*60;
+    renderPm();
+    return;
+  }
+  renderPm();
+}
 function pmToggle(){
   if(state.pm.run){
-    state.pm.run=false; clearInterval(state.pm.timer); renderPm(); return;
+    state.pm.left = pmRemaining();
+    state.pm.run=false; clearInterval(state.pm.timer); state.pm.endTs=0; renderPm(); return;
   }
   if(!state.curId){ toast("请先选一个专注任务"); return; }
   state.pm.run=true;
-  state.pm.timer=setInterval(function(){
-    state.pm.left--;
-    if(state.pm.left<=0){
-      clearInterval(state.pm.timer);
-      state.pm.run=false; state.pm.left=0;
-      var t=findT(state.curId);
-      pushFocus({"日期":{date:today()},"任务":{text:t?t["任务"]:"（未指定）"},"场景":{select:(t&&t["场景"])||"投放执行"},"专注分钟":{number:state.pm.min},"备注":{text:"番茄钟完成"}})
-        .then(function(){ return fetchData(); })
-        .then(function(){ refreshAll(); })
-        .catch(function(){ refreshAll(); });
-      toast("专注完成！已记录 "+state.pm.min+" 分钟");
-      state.pm.left=state.pm.min*60;
-    }
-    renderPm();
-  },1000);
-  renderPm();
+  state.pm.endTs = Date.now() + state.pm.left*1000;
+  state.pm.timer=setInterval(pmTick,1000);
+  pmTick();
 }
 $("pmStart").onclick=pmToggle;
 $("pmReset").onclick=function(){ pmSet(state.pm.min); };
+/* 切回前台时立刻按真实时间校正显示，避免后台节流导致的时间错乱 */
+document.addEventListener("visibilitychange",function(){ if(!document.hidden && state.pm.run) pmTick(); });
 
 /* 进展保存 */
 $("noteSave").onclick=function(){
