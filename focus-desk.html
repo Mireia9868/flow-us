@@ -316,6 +316,16 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
   .pi-a{opacity:1}
   .bar-n{width:60px;font-size:12px}
 }
+
+/* ---------- tabs ---------- */
+.tabs-sec{margin-top:6px}
+.tabbar{display:flex;gap:8px;margin:0 0 14px}
+.tab{height:38px;padding:0 18px;border-radius:20px;background:var(--card);border:1px solid var(--line);font-size:14px;font-weight:560;color:var(--tx2);cursor:pointer;transition:.15s}
+.tab:hover{border-color:var(--pri)}
+.tab.on{background:var(--pri-l);border-color:#f6c3d8;color:var(--pri)}
+.pane{display:none}
+.pane.on{display:block}
+#notesTa{min-height:360px;line-height:1.7;font-size:14px}
 </style>
 </head>
 <body data-page-node-id="XitPksSDzcfhuA5bATOn2X">
@@ -411,27 +421,14 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
         <div class="pl-b" id="plBody" data-page-node-id="A8ZQ6HvUOMl95BxAyPfdeB"></div>
       </section>
 
-  <div class="grid" data-page-node-id="iosdQWRLCbG97iy3hmUEMv">
-    <!-- 左：专注主区 -->
-    <div data-page-node-id="ZVWacTXVdtYnBhfWwAe5MT">
-      
-
-      <section class="card">
-        <div class="card-h">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
-          <h2>项目进度</h2>
-          <div class="r"><span class="tag p2" id="prjCnt">0</span></div>
-        </div>
-        <div class="prj-tip">每个项目写清成功标准和截止日，这里的进度条才有意义</div>
-        <div class="prj-b" id="prjBody"></div>
-        <div class="prj-f"><button class="btn sm" id="btnPrjAdd">+ 新建项目</button></div>
-      </section>
-
+    <!-- 概览 / 笔记 切换 -->
+  <div class="tabs-sec">
+    <div class="tabbar" role="tablist">
+      <button class="tab on" data-tb="ov" type="button">概览 · 周报</button>
+      <button class="tab" data-tb="nt" type="button">笔记随记</button>
     </div>
-
-    <!-- 右：统计 + 周报 -->
-    <div data-page-node-id="z1LnjOnHdGIOpRexmiAIHB">
-      <section class="card" data-page-node-id="8xCeXkVfUoULgvDj4rREDR">
+    <div class="pane on" id="paneOV">
+<section class="card" data-page-node-id="8xCeXkVfUoULgvDj4rREDR">
         <div class="card-h" data-page-node-id="k9XLm06zRKJjGFIcQrBfvR">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2f6bff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="oHh15ZgXIQGVpiD2R3ElE7"><path d="M3 3v18h18" data-page-node-id="CmLJu4DtDhoGlYhw7eYBVT"/><path d="M7 15l4-5 3 3 5-7" data-page-node-id="8xvdGcOhnd6mw6DWUKD0Rg"/></svg>
           <h2 data-page-node-id="dlNDP3akwV318hHJm6eEKe">本周概览</h2>
@@ -462,37 +459,8 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
         </div>
       </section>
 
-      <section class="card">
-        <div class="card-h">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2f6bff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 7-7"/><path d="M14 8h6v6"/></svg>
-          <h2>WoW 环比 · 业务线周数据</h2>
-          <div class="r"><span class="tag p2" id="wowWk">—</span></div>
-        </div>
-        <div class="card-b">
-          <div class="wow-f">
-            <div><label>业务线</label><select id="wLine"></select></div>
-            <div><label>周起始日（周一）</label><input id="wDate" type="date"></div>
-            <div><label>费用 ($)</label><input id="wCost" type="number" inputmode="decimal" placeholder="0.00"></div>
-          </div>
-          <div class="wow-f" style="grid-template-columns:1fr auto;margin-top:-2px">
-            <div><label>Leads</label><input id="wLeads" type="number" inputmode="numeric" placeholder="0"></div>
-            <div style="display:flex;align-items:flex-end">
-              <button class="btn pri" id="wSave" style="height:38px">保存本周数据</button>
-            </div>
-          </div>
-          <div style="overflow-x:auto;margin-top:14px">
-            <table class="wow-t">
-              <thead><tr>
-                <th>业务线</th><th>费用</th><th>Leads</th><th>CPL</th>
-              </tr></thead>
-              <tbody id="wowBody"></tbody>
-            </table>
-          </div>
-          <div class="wow-sum" id="wowSum"></div>
-        </div>
-      </section>
-
-      <section class="card" data-page-node-id="4SxR2DEBb0HdovvxsPXNAg">
+      
+<section class="card" data-page-node-id="4SxR2DEBb0HdovvxsPXNAg">
         <div class="card-h" data-page-node-id="JNcBmfIZc1y9JegbHDDeRc">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2f6bff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="joLEfBFcEXUgr4sorB2W5x"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" data-page-node-id="xLqHFju4nqZbg6Sv7MQIIx"/><path d="M14 2v6h6" data-page-node-id="842NAuXoBWet8gZLpE2h2E"/><path d="M8 13h8M8 17h5" data-page-node-id="lctMshHFTNOjQHXF3gx7G3"/></svg>
           <h2 data-page-node-id="loiUxLvREuMIJ4oFnX5GPu">周报快捷导出</h2>
@@ -509,9 +477,21 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
         </div>
       </section>
     </div>
+    <div class="pane" id="paneNT">
+      <section class="card">
+        <div class="card-h">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h6"/></svg>
+          <h2>笔记随记</h2>
+        </div>
+        <div class="card-b">
+          <textarea id="notesTa" class="rp-t" placeholder="随手记：临时想法、待整理清单、灵感、链接… 自动保存到本机"></textarea>
+          <div class="nt-f"><span class="nt-hint" id="notesHint"></span></div>
+        </div>
+      </section>
+    </div>
   </div>
 
-  <!-- 页尾：低频操作收纳（同步状态 / 云同步设置 / 导出备份） -->
+<!-- 页尾：低频操作收纳（同步状态 / 云同步设置 / 导出备份） -->
   <div class="ft">
     <div class="syn" id="syn" data-page-node-id="boju9c3RWJloSrcvEm5fhI"><i data-page-node-id="d3aYF4HC9LvuWU7PFtq7HW"></i><span id="syntx" data-page-node-id="QL1VLWcChPqhmWfAtMvm9s">已同步</span></div>
     <button class="btn" id="btnSync" title="云同步设置">
@@ -755,49 +735,6 @@ function prjPhase(p){
   var arr=(p["阶段"]||[]).filter(function(s){ return String(s).trim(); });
   return {arr:arr,total:arr.length,cur:Math.min(Math.max(parseInt(p["当前阶段"],10)||0,0),arr.length)};
 }
-function renderProjects(){
-  var box=$("prjBody"); if(!box) return;
-  var list=state.projects||[];
-  $("prjCnt").textContent=list.length;
-  if(!list.length){
-    box.innerHTML='<div class="prj-e">还没有项目。<br>建议把手上在做的事按「项目 + 阶段 + 成功标准」拆一遍，<br>比如「Readdy GG 冷启动」。</div>';
-    return;
-  }
-  var h="";
-  list.forEach(function(p){
-    var ph=prjPhase(p), st=prjTasks(p["名称"]);
-    var pct=st.all? Math.round(st.done/st.all*100) : 0;
-    var due=dOf(p["目标日期"]), dl="";
-    if(due){
-      var left=dayDiff(today(),due);   // 正数=还剩几天，负数=已逾期
-      dl = left<0 ? ('<span class="prj-ddl od">逾期 '+Math.abs(left)+' 天</span>')
-         : left===0 ? '<span class="prj-ddl od">今天到期</span>'
-         : '<span class="prj-ddl">剩 '+left+' 天 · '+due.slice(5)+'</span>';
-    }
-    var fin = ph.total && ph.cur>=ph.total;
-    h+='<div class="prj">'
-      +'<div class="prj-1">'
-        +'<b class="prj-n">'+esc(p["名称"])+'</b>'
-        +(ph.total?'<span class="prj-st'+(fin?" fin":"")+'" data-pact="next" data-pid="'+p._id+'" title="点一下推进到下一阶段">阶段 '+ph.cur+' / '+ph.total+'</span>':'')
-        +dl
-        +'<span class="prj-ic">'
-          +'<button data-pact="add" data-pid="'+p._id+'" title="给这个项目加个任务"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>'
-          +'<button data-pact="edit" data-pid="'+p._id+'" title="编辑项目"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>'
-          +'<button data-pact="del" data-pid="'+p._id+'" title="删除项目"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>'
-        +'</span>'
-      +'</div>'
-      +'<div class="prj-bar"><i style="width:'+pct+'%"></i></div>'
-      +'<div class="prj-2">'
-        +'<span>任务 <span class="n">'+st.done+' / '+st.all+'</span></span>'
-        +'<span>完成度 <span class="n">'+pct+'%</span></span>'
-        +(ph.total&&ph.cur>0?'<span>当前：<span class="n">'+esc(ph.arr[ph.cur-1])+'</span></span>':'')
-        +(p["成功标准"]?'<span class="prj-goal" title="成功标准">成功标准：'+esc(p["成功标准"])+'</span>':'')
-      +'</div>'
-    +'</div>';
-  });
-  box.innerHTML=h;
-}
-
 /* ========== 渲染层（互不调用，由 refreshAll 统一调度） ========== */
 function renderToday(){
   var box=$("todayList"), list=todayTasks();
@@ -1013,67 +950,6 @@ function pctBadge(cur,prev){
   return '<span class="wow-n '+(up?"up":"dn")+'" title="较上周 '+(up?"上升":"下降")+' '+Math.abs(Math.round(d))+'%">'
     +'<i></i>'+(up?"+":"")+Math.round(d)+'%</span>';
 }
-function renderWow(){
-  var ws=weekStart();
-  var prevWk=shiftDay(ws,-7);
-  $("wowWk").textContent=ws+" 起";
-
-  var rows=LINES.map(function(l){
-    var cur=null,prev=null;
-    state.wow.forEach(function(r){
-      var d=dOf(r["周起始日"]);
-      if(r["业务线"]!==l) return;
-      if(d===ws) cur=r;
-      if(d===prevWk) prev=r;
-    });
-    return {line:l,cur:cur,prev:prev};
-  }).filter(function(r){ return r.cur||r.prev; });
-
-  var tb=$("wowBody");
-  if(!rows.length){
-    tb.innerHTML='<tr><td colspan="4" class="wow-e">还没有周数据 —— 在上方选业务线、填费用和 Leads 保存后，这里会自动算 CPL 和环比</td></tr>';
-    $("wowSum").innerHTML="";
-    return;
-  }
-  var h="";
-  var tC=0,tL=0,pC=0,pL=0;
-  rows.forEach(function(r){
-    var c=r.cur, p=r.prev;
-    var cc=c?Number(c["费用"])||0:0, cl=c?Number(c["Leads"])||0:0;
-    var pc=p?Number(p["费用"])||0:0, pl=p?Number(p["Leads"])||0:0;
-    var cpl = cl? cc/cl : null;
-    var ppl = pl? pc/pl : null;
-    tC+=cc; tL+=cl; pC+=pc; pL+=pl;
-    h+='<tr><td><span style="display:inline-block;width:7px;height:7px;border-radius:2px;background:'+(LN_COLOR[r.line]||"#8b95a3")+';margin-right:6px"></span>'+r.line+'</td>'
-      +'<td>$'+fmtN(cc)+'<br>'+pctBadge(cc,pc,false)+'</td>'
-      +'<td>'+fmtN(cl)+'<br>'+pctBadge(cl,pl,false)+'</td>'
-      +'<td>'+(cpl===null?"—":"$"+(Math.round(cpl*100)/100))+'<br>'+pctBadge(cpl,ppl,true)+'</td>'
-      +'</tr>';
-  });
-  tb.innerHTML=h;
-
-  var tcpl = tL? tC/tL : null;
-  var pcpl = pL? pC/pL : null;
-  var s='本周合计：费用 <b>$'+fmtN(tC)+'</b> '+pctBadge(tC,pC,false)
-       +' · Leads <b>'+fmtN(tL)+'</b> '+pctBadge(tL,pL,false)
-       +' · CPL <b>'+(tcpl===null?"—":"$"+(Math.round(tcpl*100)/100))+'</b> '+pctBadge(tcpl,pcpl,true);
-  var warn=[];
-  rows.forEach(function(r){
-    var c=r.cur,p=r.prev;
-    if(!c||!p) return;
-    var cc=Number(c["费用"])||0, cl=Number(c["Leads"])||0;
-    var pc=Number(p["费用"])||0, pl=Number(p["Leads"])||0;
-    if(pc>0 && cc>pc*1.15 && cl<=pl){
-      warn.push(r.line+" 费用涨 "+Math.round((cc-pc)/pc*100)+"% 但 Leads 未同步增长，需查归因/出价");
-    }
-    if(pl>0 && cl===0){
-      warn.push(r.line+" 本周 Leads 归零，检查转化追踪");
-    }
-  });
-  if(warn.length) s+='<br><span style="color:#b06f00">⚠ '+warn.join("；")+'</span>';
-  $("wowSum").innerHTML=s;
-}
-
 function renderStats(){
   var s=weekStats();
   $("stDone").textContent=s.done;
@@ -1116,12 +992,10 @@ function renderPm(){
 function refreshAll(){
   renderToday();
   renderFocus();
-  renderProjects();
   renderLines();
   renderPool();
   renderStats();
   renderHeat();
-  renderWow();
   renderPm();
 }
 
@@ -1398,7 +1272,7 @@ function onAct(e){
     if(t2 && t2["状态"]!=="进行中" && !isDone(t2)){
       pushTask({"状态":{select:"进行中"}},id).then(function(){ t2["状态"]="进行中"; saveLocal(); refreshAll(); }).catch(function(){ refreshAll(); });
     }else{ refreshAll(); }
-    if(window.innerWidth<900) window.scrollTo({top:document.querySelector(".grid").offsetTop-14,behavior:"smooth"});
+    if(window.innerWidth<900) window.scrollTo({top:document.querySelector(".tabs-sec").offsetTop-14,behavior:"smooth"});
   }
   else if(act==="start"){
     pmSet(state.pm.min); pmToggle();
@@ -1598,7 +1472,6 @@ function openPrj(id){
 $("qPhase").addEventListener("input",function(){ prjFillCur($("qCur").value); });
 $("qCancel").onclick=function(){ $("mPrj").classList.remove("on"); };
 $("mPrj").onclick=function(e){ if(e.target===this) this.classList.remove("on"); };
-$("btnPrjAdd").onclick=function(){ openPrj(""); };
 $("qSave").onclick=function(){
   var name=$("qName").value.trim();
   if(!name){ toast("请填写项目名称"); return; }
@@ -1648,33 +1521,6 @@ document.addEventListener("click",function(e){
 });
 
 /* WoW 数据保存（同业务线+同周起始日覆盖更新） */
-$("wSave").onclick=function(){
-  var line=$("wLine").value;
-  var wk=$("wDate").value || weekStart();
-  wk=mondayOf(wk);
-  var cost=parseFloat($("wCost").value);
-  var leads=parseInt($("wLeads").value,10);
-  if(!isFinite(cost) && !isFinite(leads)){ toast("请至少填写费用或 Leads"); return; }
-  if(!isFinite(cost)) cost=0;
-  if(!isFinite(leads)) leads=0;
-
-  var exist=null;
-  for(var i=0;i<state.wow.length;i++){
-    var r=state.wow[i];
-    if(r["业务线"]===line && dOf(r["周起始日"])===wk){ exist=r; break; }
-  }
-  var p;
-  if(exist){
-    exist["业务线"]=line; exist["周起始日"]=wk; exist["费用"]=cost; exist["Leads"]=leads;
-    p=commit();
-  }else{
-    state.wow.push({_id:"w_"+Date.now()+"_"+Math.random().toString(36).slice(2,6),"业务线":line,"周起始日":wk,"费用":cost,"Leads":leads});
-    p=commit();
-  }
-  p.then(function(){ refreshAll(); toast(exist?"已更新本周数据":"已保存本周数据"); })
-   .catch(function(){ refreshAll(); toast("保存失败，请检查网络"); });
-};
-
 /* 周报生成 */
 $("rpGen").onclick=function(){
   var ws=weekStart(), td=today();
@@ -1712,38 +1558,7 @@ $("rpGen").onclick=function(){
   });
   if(!any) L.push("（本周暂无专注记录）");
   L.push("");
-  L.push("五、业务线 WoW 环比（本周 vs 上周）");
-  var pv=shiftDay(ws,-7), hasW=false;
-  LINES.forEach(function(l){
-    var c=null,pp=null;
-    state.wow.forEach(function(r){
-      var d=dOf(r["周起始日"]);
-      if(r["业务线"]!==l) return;
-      if(d===ws) c=r; if(d===pv) pp=r;
-    });
-    if(!c && !pp) return;
-    hasW=true;
-    var cc=c?Number(c["费用"])||0:0, cl=c?Number(c["Leads"])||0:0;
-    var pc=pp?Number(pp["费用"])||0:0, pl=pp?Number(pp["Leads"])||0:0;
-    var cpl=cl?cc/cl:null, ppl=pl?pc/pl:null;
-    var pc2=function(a,b){ if(!b) return "—"; var x=(a-b)/b*100; return (x>0?"+":"")+Math.round(x)+"%"; };
-    L.push("· "+l+"：费用 $"+fmtN(cc)+"（"+pc2(cc,pc)+"） / Leads "+fmtN(cl)+"（"+pc2(cl,pl)+"） / CPL "+(cpl===null?"—":"$"+(Math.round(cpl*100)/100))+"（"+((cpl===null||ppl===null)?"—":pc2(cpl,ppl))+"）");
-  });
-  if(!hasW) L.push("（本周暂无业务线数据）");
-  L.push("");
-  L.push("六、项目阶段进展");
-  if((state.projects||[]).length){
-    state.projects.forEach(function(p){
-      var ph=prjPhase(p), st=prjTasks(p["名称"]);
-      var pct=st.all? Math.round(st.done/st.all*100):0;
-      var due=dOf(p["目标日期"])||"无";
-      var tail=ph.total&&ph.cur>0?("（当前："+ph.arr[ph.cur-1]+"）"):"";
-      L.push("· "+p["名称"]+"：阶段 "+ph.cur+"/"+ph.total+tail+" / 任务 "+st.done+"/"+st.all+"（"+pct+"%） / 截止 "+due);
-      if(p["成功标准"]) L.push("   成功标准："+p["成功标准"]);
-    });
-  }else L.push("（暂无项目）");
-  L.push("");
-  L.push("七、下一步计划");
+  L.push("五、下一步计划");
   var nxt=state.tasks.filter(function(t){return !isDone(t);}).sort(function(a,b){var p={"P0":0,"P1":1,"P2":2};return (p[a["优先级"]]||9)-(p[b["优先级"]]||9);}).slice(0,5);
   nxt.forEach(function(t,i){ L.push((i+1)+". "+t["任务"]+"（"+t["优先级"]+" / "+t["场景"]+"）"); });
   $("rpTa").value=L.join("\n");
@@ -1808,8 +1623,6 @@ $("scSave").onclick=function(){
 function initSelects(){
   var opt=LINES.map(function(l){ return '<option value="'+l+'">'+l+'</option>'; }).join("");
   $("fLine").innerHTML=opt;
-  $("wLine").innerHTML=opt;
-  $("wDate").value=weekStart();
 }
 
 function init(){
@@ -1880,6 +1693,33 @@ function seedProjects(){
 
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", init);
 else init();
+
+/* 概览/笔记 Tab 切换 + 笔记随记本机自动保存 */
+(function(){
+  var tabs=document.querySelectorAll(".tab");
+  tabs.forEach(function(b){
+    b.addEventListener("click",function(){
+      var tb=b.getAttribute("data-tb");
+      tabs.forEach(function(x){ x.classList.remove("on"); });
+      b.classList.add("on");
+      document.getElementById("paneOV").classList.toggle("on", tb==="ov");
+      document.getElementById("paneNT").classList.toggle("on", tb==="nt");
+    });
+  });
+  var ta=document.getElementById("notesTa");
+  if(ta){
+    ta.value=localStorage.getItem(LS+"scratch")||"";
+    var hint=document.getElementById("notesHint"), t;
+    ta.addEventListener("input",function(){
+      clearTimeout(t);
+      t=setTimeout(function(){
+        localStorage.setItem(LS+"scratch", ta.value);
+        var d=new Date();
+        hint.textContent="已自动保存 "+p2(d.getHours())+":"+p2(d.getMinutes());
+      },400);
+    });
+  }
+})();
 </script>
 </body>
 </html>
