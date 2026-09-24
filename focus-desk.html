@@ -333,15 +333,8 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
       </div>
     </div>
     <div class="hd-r" data-page-node-id="iU4FshhbOvIHh4xCQx1lwr">
-      <div class="syn" id="syn" data-page-node-id="boju9c3RWJloSrcvEm5fhI"><i data-page-node-id="d3aYF4HC9LvuWU7PFtq7HW"></i><span id="syntx" data-page-node-id="QL1VLWcChPqhmWfAtMvm9s">已同步</span></div>
-      <button class="btn" id="btnSync" title="云同步设置">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>同步
-      </button>
       <button class="btn" id="btnAdd" data-page-node-id="D1yQnB50akLG2VVAMhDo8N">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" data-page-node-id="ncdJtAgmr7UYB1wcmxslz1"><path d="M12 5v14M5 12h14" data-page-node-id="1AusEPQOk0r0LQBO73HmZC"/></svg>新建任务
-      </button>
-      <button class="btn" id="btnExport" data-page-node-id="lbqsXjWRgzAMcld8hAVAl8">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="O7mLPxbZHxKE5xkP9ab20b"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" data-page-node-id="BhWF1cACIce2OgfONkrmrB"/><path d="M7 10l5 5 5-5" data-page-node-id="rHXpfxGMwIqczuhqrGp1wZ"/><path d="M12 15V3" data-page-node-id="cKgFNyKIfrHUCSIx3FDAAo"/></svg>导出备份
       </button>
     </div>
   </div>
@@ -379,11 +372,6 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
               <div class="row" data-page-node-id="btES7NEhKHL8Zw2YBuBMmD">
                 <button class="btn sm pri" id="pmStart" data-page-node-id="cGOCy5ZunWoCUlZuk3C6IV">开始专注</button>
                 <button class="btn sm" id="pmReset" data-page-node-id="5b3Fpy7lFGbdX5t5jZuLUz">重置</button>
-              </div>
-              <div class="row" data-page-node-id="vulILpSHoMOFRbhNfwOFIv">
-                <button class="mini" data-min="15" data-page-node-id="rU0pB2yvSrj10cKG9MyXyn">15分</button>
-                <button class="mini" data-min="25" data-page-node-id="bebTBceX23Kdp6nj16jtjw">25分</button>
-                <button class="mini" data-min="45" data-page-node-id="3BWcF4YaTpG7oLlhXAMKCo">45分</button>
               </div>
             </div>
           </div>
@@ -519,6 +507,17 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
         </div>
       </section>
     </div>
+  </div>
+
+  <!-- 页尾：低频操作收纳（同步状态 / 云同步设置 / 导出备份） -->
+  <div class="ft">
+    <div class="syn" id="syn" data-page-node-id="boju9c3RWJloSrcvEm5fhI"><i data-page-node-id="d3aYF4HC9LvuWU7PFtq7HW"></i><span id="syntx" data-page-node-id="QL1VLWcChPqhmWfAtMvm9s">已同步</span></div>
+    <button class="btn" id="btnSync" title="云同步设置">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>同步
+    </button>
+    <button class="btn" id="btnExport" title="导出 JSON 备份" data-page-node-id="lbqsXjWRgzAMcld8hAVAl8">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="O7mLPxbZHxKE5xkP9ab20b"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" data-page-node-id="BhWF1cACIce2OgfONkrmrB"/><path d="M7 10l5 5 5-5" data-page-node-id="rHXpfxGMwIqczuhqrGp1wZ"/><path d="M12 15V3" data-page-node-id="cKgFNyKIfrHUCSIx3FDAAo"/></svg>导出备份
+    </button>
   </div>
 </div>
 
@@ -855,17 +854,7 @@ function renderFocus(){
   $("fcSc").textContent=t["场景"]||"—";
   var dt = od?("逾期 "+Math.abs(dayDiff(d,today()))+" 天"):(d?(d===today()?"今天截止":dayDiff(today(),d)+" 天后截止"):"无截止");
   var h='<div class="fc-now">'
-    +'<div class="fc-lb">'
-    +'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4z"/></svg>'
-    +'正在专注的唯一任务</div>'
     +'<div class="fc-t">'+esc(t["任务"])+'</div>'
-    +'<div class="fc-m">'
-      +'<span class="tag '+String(t["优先级"]||"P2").toLowerCase()+'">'+esc(t["优先级"]||"P2")+'</span>'
-      +(od?'<span class="tag od">逾期</span>':'')
-      +'<span class="tag '+(t["状态"]==="进行中"?"p1":"p2")+'">'+esc(t["状态"]||"待办")+'</span>'
-      +lineTag(t["业务线"])
-      +'<span style="font-size:12px;color:var(--tx3)">'+dt+'</span>'
-    +'</div>'
     +prjCtx(t)
     +'</div>';
   var rawNote=String(t["备注"]||"").split("\n[进展]")[0];
@@ -1443,40 +1432,86 @@ document.addEventListener("click", function(e){
 });
 
 /* 番茄钟（基于真实时间戳，切到后台也不会少算时间） */
-function pmSet(m){ state.pm.min=m; state.pm.left=m*60; state.pm.run=false; state.pm.endTs=0; clearInterval(state.pm.timer); renderPm(); }
+function pmSet(m){ state.pm.min=m; state.pm.left=m*60; state.pm.run=false; state.pm.endTs=0; clearInterval(state.pm.timer); pmWorkerSet(0); renderPm(); }
 function pmRemaining(){ return Math.max(0, Math.round((state.pm.endTs - Date.now())/1000)); }
+/* 后台静默计时：页面隐藏后主线程 setInterval 会被浏览器节流到约 1 次/分钟，
+   这里用一个 Blob Worker（Worker 定时器不受页面可见性节流）盯真实结束时间戳，
+   到点立刻回调 pmFinish，保证后台也能准点通知。Worker 创建失败时退回主线程轮询兜底 */
+var _pmWk=null;
+function pmWorkerSet(endTs){
+  try{
+    if(!_pmWk){
+      var src="var end=null;setInterval(function(){if(end!=null&&Date.now()>=end){postMessage(1);end=null;}},1000);onmessage=function(e){end=e.data;};";
+      _pmWk=new Worker(URL.createObjectURL(new Blob([src],{type:"text/javascript"})));
+      _pmWk.onmessage=function(){ pmFinish(); };
+    }
+    _pmWk.postMessage(endTs||null);
+  }catch(e){ _pmWk=null; }
+}
+/* 到点提醒：系统通知 + 标题闪烁 + 提示音，三重兜底（后台也有感知） */
+function pmNotify(){
+  var t=findT(state.curId);
+  var body="「"+(t?t["任务"]:"专注")+"」的 "+state.pm.min+" 分钟到了，起来活动一下吧";
+  try{ if(window.Notification&&Notification.permission==="granted"){ new Notification("专注完成",{body:body,tag:"focus-pm"}); } }catch(e){}
+  document.title="✅ 专注完成！"+state.pm.min+" 分钟 — GTM 单任务专注台";
+  try{
+    if(!pmNotify._ac){ pmNotify._ac=new (window.AudioContext||window.webkitAudioContext)(); }
+    var ac=pmNotify._ac;
+    if(ac.state==="suspended"){ ac.resume(); }
+    var o=ac.createOscillator(), g=ac.createGain();
+    o.connect(g); g.connect(ac.destination);
+    o.type="sine";
+    o.frequency.setValueAtTime(880,ac.currentTime);
+    o.frequency.setValueAtTime(660,ac.currentTime+0.18);
+    g.gain.setValueAtTime(0.12,ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.5);
+    o.start(ac.currentTime); o.stop(ac.currentTime+0.5);
+  }catch(e){}
+}
+function pmFinish(){
+  if(!state.pm.run) return;
+  clearInterval(state.pm.timer); state.pm.run=false; state.pm.left=0; state.pm.endTs=0; pmWorkerSet(0);
+  var t=findT(state.curId);
+  pushFocus({"日期":{date:today()},"任务":{text:t?t["任务"]:"（未指定）"},"场景":{select:(t&&t["场景"])||"投放执行"},"专注分钟":{number:state.pm.min},"备注":{text:"番茄钟完成"}})
+    .then(function(){ return fetchData(); })
+    .then(function(){ refreshAll(); })
+    .catch(function(){ refreshAll(); });
+  pmNotify();
+  toast("专注完成！已记录 "+state.pm.min+" 分钟");
+  state.pm.left=state.pm.min*60;
+  renderPm();
+}
 function pmTick(){
   if(!state.pm.run) return;
   state.pm.left = pmRemaining();
-  if(state.pm.left<=0){
-    clearInterval(state.pm.timer); state.pm.run=false; state.pm.left=0; state.pm.endTs=0;
-    var t=findT(state.curId);
-    pushFocus({"日期":{date:today()},"任务":{text:t?t["任务"]:"（未指定）"},"场景":{select:(t&&t["场景"])||"投放执行"},"专注分钟":{number:state.pm.min},"备注":{text:"番茄钟完成"}})
-      .then(function(){ return fetchData(); })
-      .then(function(){ refreshAll(); })
-      .catch(function(){ refreshAll(); });
-    toast("专注完成！已记录 "+state.pm.min+" 分钟");
-    state.pm.left=state.pm.min*60;
-    renderPm();
-    return;
-  }
+  if(state.pm.left<=0){ pmFinish(); return; }
   renderPm();
 }
 function pmToggle(){
   if(state.pm.run){
     state.pm.left = pmRemaining();
-    state.pm.run=false; clearInterval(state.pm.timer); state.pm.endTs=0; renderPm(); return;
+    state.pm.run=false; clearInterval(state.pm.timer); state.pm.endTs=0; pmWorkerSet(0); renderPm(); return;
   }
   if(!state.curId){ toast("请先选一个专注任务"); return; }
+  /* 首次启动时申请系统通知权限（必须由用户点击触发） */
+  try{ if(window.Notification&&Notification.permission==="default"){ Notification.requestPermission(); } }catch(e){}
   state.pm.run=true;
   state.pm.endTs = Date.now() + state.pm.left*1000;
   state.pm.timer=setInterval(pmTick,1000);
+  pmWorkerSet(state.pm.endTs);
+  document.title=BASE_TITLE;
   pmTick();
 }
 $("pmStart").onclick=pmToggle;
 $("pmReset").onclick=function(){ pmSet(state.pm.min); };
-/* 切回前台时立刻按真实时间校正显示，避免后台节流导致的时间错乱 */
-document.addEventListener("visibilitychange",function(){ if(!document.hidden && state.pm.run) pmTick(); });
+/* 切回前台时立刻按真实时间校正显示；标题恢复常态 */
+var BASE_TITLE=document.title;
+document.addEventListener("visibilitychange",function(){
+  if(!document.hidden){
+    if(state.pm.run) pmTick();
+    else document.title=BASE_TITLE;
+  }
+});
 
 /* 进展保存 */
 $("noteSave").onclick=function(){
@@ -1795,7 +1830,7 @@ function init(){
   }else{
     state.mode="local";
     setSyn("off","本地模式");
-    $("bntx").textContent="未开启云同步，数据仅存本设备。点右上角同步按钮可开启多设备同步";
+    $("bntx").textContent="未开启云同步，数据仅存本设备。点页面底部同步按钮可开启多设备同步";
     $("bn").classList.add("on");
   }
   renderSyncCfg();
