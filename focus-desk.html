@@ -87,8 +87,6 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
 .tag.sc{background:var(--pri-l);color:var(--pri)}
 .empty{padding:26px 16px;text-align:center;color:var(--tx3);font-size:13.5px}
 
-/* ---------- grid ---------- */
-.grid{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;align-items:start}
 
 /* ---------- focus card ---------- */
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:16px}
@@ -185,27 +183,6 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
 .hm-l span{font-size:9.5px;color:var(--tx3);text-align:center;overflow:hidden;white-space:nowrap}
 .hm-leg{display:flex;align-items:center;gap:4px;margin-left:6px}
 
-/* ---------- wow ---------- */
-.wow-t{width:100%;border-collapse:collapse;font-size:12.8px}
-.wow-t th{text-align:right;font-size:11px;font-weight:600;color:var(--tx3);padding:0 0 7px;border-bottom:1px solid var(--line2);white-space:nowrap}
-.wow-t th:first-child{text-align:left}
-.wow-t td{padding:9px 0;border-bottom:1px solid var(--line2);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.wow-t td:first-child{text-align:left;font-weight:560}
-.wow-t tr:last-child td{border-bottom:none}
-.wow-n{display:inline-flex;align-items:center;gap:3px;font-weight:600;font-size:12px}
-.wow-n.up{color:var(--red)}
-.wow-n.dn{color:var(--grn)}
-.wow-n.flat{color:var(--tx3)}
-.wow-n i{width:0;height:0;border-left:3.5px solid transparent;border-right:3.5px solid transparent;display:block}
-.wow-n.up i{border-bottom:5px solid var(--red)}
-.wow-n.dn i{border-top:5px solid var(--grn)}
-.wow-e{text-align:center;color:var(--tx3);font-size:12.5px;padding:18px 0}
-.wow-f{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:12px}
-.wow-f label{display:block;font-size:11.5px;color:var(--tx2);font-weight:560;margin-bottom:4px}
-.wow-f input,.wow-f select{width:100%;height:38px;padding:0 10px;border:1px solid var(--line);border-radius:var(--r2);background:#fff}
-.wow-f input:focus,.wow-f select:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px rgba(236,72,153,.12)}
-.wow-sum{margin-top:12px;padding:11px 13px;background:var(--bg);border-radius:var(--r2);font-size:12.5px;color:var(--tx2);line-height:1.7}
-.wow-sum b{color:var(--tx)}
 
 /* ---------- sakura fx ---------- */
 .petal{position:fixed;z-index:9999;pointer-events:none;width:10px;height:10px;background:linear-gradient(135deg,#ffd9ea,#f9a8c9);border-radius:120% 0 120% 0;box-shadow:inset 0 0 2px rgba(255,255,255,.85);will-change:transform,opacity;animation:petalDrift var(--t,1.4s) ease-out forwards}
@@ -246,34 +223,12 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
 }
 @media (prefers-reduced-motion:reduce){.petal,.fx-dot,.fx-bloom{display:none}}
 
-/* ---------- 项目进度 ---------- */
+/* 专注卡：项目上下文 */
 .fc-prj{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px;padding-top:9px;border-top:1px dashed #f2c8da;font-size:11.5px;color:var(--tx3)}
 .fc-prj-n{font-size:11.5px;font-weight:640;color:var(--pri);background:rgba(255,255,255,.8);border:1px solid #f6c3d8;border-radius:20px;padding:2px 9px}
 .fc-prj-s{color:var(--tx2);font-weight:560}
 .fc-prj-c{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:52%}
 .fc-prj-p{margin-left:auto;font-variant-numeric:tabular-nums;flex-shrink:0}
-.prj-tip{font-size:11.5px;color:var(--tx3);padding:0 18px 10px;line-height:1.5}
-.prj-b{padding:0 12px}
-.prj{padding:11px 12px;border:1px solid var(--line2);border-radius:var(--r2);margin-bottom:9px;background:var(--card)}
-.prj:last-child{margin-bottom:0}
-.prj-1{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.prj-n{font-size:13.5px;font-weight:600;color:var(--tx);flex-shrink:0}
-.prj-st{font-size:11px;font-weight:600;color:var(--pri);background:var(--pri-l);border-radius:20px;padding:3px 8px;flex-shrink:0}
-.prj-st:hover{background:#fbdfea}
-.prj-st.fin{background:#e9f7ef;color:#17794a}
-.prj-ddl{font-size:11.5px;color:var(--tx3);flex-shrink:0}
-.prj-ddl.od{color:#e5484d;font-weight:600}
-.prj-ic{margin-left:auto;display:flex;gap:2px;flex-shrink:0}
-.prj-ic button{width:26px;height:26px;border:none;background:transparent;color:var(--tx3);border-radius:6px;display:flex;align-items:center;justify-content:center}
-.prj-ic button:hover{background:var(--bg);color:var(--tx)}
-.prj-bar{height:7px;background:var(--bg);border-radius:5px;overflow:hidden;margin:8px 0 6px}
-.prj-bar i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,#f9a8c9,var(--pri));transition:width .35s ease}
-.prj-2{display:flex;gap:10px;align-items:baseline;font-size:11.5px;color:var(--tx3);line-height:1.5;flex-wrap:wrap}
-.prj-2 .n{color:var(--tx2);font-weight:560;font-variant-numeric:tabular-nums}
-.prj-goal{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.prj-f{padding:10px 18px 14px}
-.prj-e{text-align:center;color:var(--tx3);font-size:12.5px;padding:14px 4px 18px;line-height:1.6}
-@media(max-width:768px){.prj-goal{white-space:normal}}
 
 /* ---------- report ---------- */
 .rp-t{width:100%;min-height:130px;padding:12px;border:1px solid var(--line);border-radius:var(--r2);background:var(--bg);font-size:13px;line-height:1.65;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
@@ -301,7 +256,6 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
 
 /* ---------- responsive ---------- */
 @media(max-width:900px){
-  .grid{grid-template-columns:1fr}
 }
 @media(max-width:640px){
   .wrap{padding:14px 12px 0}
@@ -931,7 +885,6 @@ function shiftDay(ds,n){
   return d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate());
 }
 
-/* —— WoW 环比 —— */
 function fmtN(v){
   if(v>=1000) return v.toLocaleString("en-US",{maximumFractionDigits:0});
   return String(Math.round(v*100)/100);
