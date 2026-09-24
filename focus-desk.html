@@ -138,7 +138,7 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
 .pl-tab{height:30px;padding:0 12px;border-radius:20px;background:var(--bg);border:1px solid transparent;font-size:13px;color:var(--tx2);font-weight:520;display:inline-flex;align-items:center;gap:6px}
 .pl-tab.on{background:var(--pri-l);border-color:#f6c3d8;color:var(--pri)}
 .pl-tab b{font-size:11px;opacity:.65;font-weight:600}
-.pl-b{padding:10px 12px 14px;max-height:520px;overflow-y:auto}
+.pl-b{padding:10px 12px 14px;max-height:520px;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:2px 14px;align-content:start}
 .pi{display:flex;align-items:center;gap:10px;padding:11px 10px;border-radius:var(--r2);transition:.12s;cursor:pointer;border:1px solid transparent}
 .pi:hover{background:var(--bg)}
 .pi.on{background:var(--pri-l);border-color:#f6c3d8}
@@ -399,6 +399,18 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
     <div class="today-b" id="todayList" data-page-node-id="eMbk61PrXSN2FRdE89URSc"></div>
   </section>
 
+  <!-- 任务池（通栏横版） -->
+      <section class="card" data-page-node-id="Ff4MS2WuHBAthPt4aeUCX2">
+        <div class="card-h" data-page-node-id="XrstVIIu15DfQiwsofFybs">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2f6bff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="ymhrEvoAlqCgW8R7BCMhm2"><path d="M8 6h13M8 12h13M8 18h13" data-page-node-id="XrpBGA5wdxxDiOVIpEda6V"/><path d="M3 6h.01M3 12h.01M3 18h.01" data-page-node-id="doOwDffpX1jlyCKdU5T8sj"/></svg>
+          <h2 data-page-node-id="NLuQ45nj3U4sBLo3ZCStIT">任务池 · 按场景</h2>
+          <div class="r" data-page-node-id="66xEvtikRaXQIlSz0oKvgj" style="display:flex;align-items:center;gap:8px"><span class="tag p2" id="poolCnt" data-page-node-id="QxbLsYhMAWfpffb6PX60ue">0</span><button class="btn sm pri" id="btnAddPool">+ 新建任务</button></div>
+        </div>
+        <div class="pl-tabs" id="plTabs" data-page-node-id="UAR1dQZP98V7yvQEqWQD85"></div>
+        <div class="lf" id="lfBar"></div>
+        <div class="pl-b" id="plBody" data-page-node-id="A8ZQ6HvUOMl95BxAyPfdeB"></div>
+      </section>
+
   <div class="grid" data-page-node-id="iosdQWRLCbG97iy3hmUEMv">
     <!-- 左：专注主区 -->
     <div data-page-node-id="ZVWacTXVdtYnBhfWwAe5MT">
@@ -415,16 +427,6 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
         <div class="prj-f"><button class="btn sm" id="btnPrjAdd">+ 新建项目</button></div>
       </section>
 
-      <section class="card" data-page-node-id="Ff4MS2WuHBAthPt4aeUCX2">
-        <div class="card-h" data-page-node-id="XrstVIIu15DfQiwsofFybs">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2f6bff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="ymhrEvoAlqCgW8R7BCMhm2"><path d="M8 6h13M8 12h13M8 18h13" data-page-node-id="XrpBGA5wdxxDiOVIpEda6V"/><path d="M3 6h.01M3 12h.01M3 18h.01" data-page-node-id="doOwDffpX1jlyCKdU5T8sj"/></svg>
-          <h2 data-page-node-id="NLuQ45nj3U4sBLo3ZCStIT">任务池 · 按场景</h2>
-          <div class="r" data-page-node-id="66xEvtikRaXQIlSz0oKvgj"><span class="tag p2" id="poolCnt" data-page-node-id="QxbLsYhMAWfpffb6PX60ue">0</span></div>
-        </div>
-        <div class="pl-tabs" id="plTabs" data-page-node-id="UAR1dQZP98V7yvQEqWQD85"></div>
-        <div class="lf" id="lfBar"></div>
-        <div class="pl-b" id="plBody" data-page-node-id="A8ZQ6HvUOMl95BxAyPfdeB"></div>
-      </section>
     </div>
 
     <!-- 右：统计 + 周报 -->
@@ -1536,6 +1538,7 @@ $("noteSave").onclick=function(){
 
 /* 新建任务 */
 $("btnAdd").onclick=function(){ $("fDue").value=today(); $("fPrj").innerHTML=prjOptHTML(""); $("mAdd").classList.add("on"); };
+$("btnAddPool").onclick=$("btnAdd").onclick;
 $("fCancel").onclick=function(){ $("mAdd").classList.remove("on"); };
 $("fSave").onclick=function(){
   var name=$("fTask").value.trim();
