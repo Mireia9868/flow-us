@@ -8,7 +8,7 @@
 
 | 层 | 方案 | 说明 |
 |---|---|---|
-| 前端 | Cloudflare Pages | 纯静态单文件，推 GitHub 即自动部署 |
+| 前端 | Cloudflare Pages | 静态单文件，使用 Wrangler 部署 |
 | 云同步 | Cloudflare Worker + KV（`worker/`） | 同步码隔离数据，**无需登录任何账号**，多设备填同一个码即同步 |
 | 兜底 | localStorage | 未配置同步或断网时自动降级本地，不丢数据 |
 
@@ -110,3 +110,11 @@ npx wrangler deploy                       # 记下输出的地址 https://flow-u
 - 数据明文存在你自己的 Cloudflare KV 里，不要写入客户名单、合同金额等敏感信息
 - 全量覆盖同步：单人使用没问题；多人同时编辑同一同步码会互相覆盖
 - 仓库里示例任务的费用 / Leads 是虚构数字，实际使用请替换
+
+## 增长试用预览
+
+1. 在 Cloudflare 创建专用 D1 数据库，并执行 `analytics/schema.sql`。在 Pages 项目的 **Preview** 环境添加名为 `PILOT_DB` 的 D1 绑定。首次 FlowUs 试用已配置 `flow-us-pilot` 数据库和 Preview 绑定。通过 `FLOW_US_PAGES_BRANCH=growth/first-run-metrics ./deploy.sh` 部署预览。脚本会从仓库根目录编译 `functions/`。
+2. 在预览 URL 追加 `?pilot=qa` 做验证。勾选页尾的试用记录，在干净浏览器中创建任务并保存进展。测试事件属于 QA 批次。确认后用 `?pilot=growth` 邀请同一批试用者，请他们先选择是否分享试用数据，再开始真实任务。
+3. 在 D1 执行 `analytics/report.sql`。报表按 UTC 日期和浏览器随机编号计算试用日活、24 小时激活和 7 天工作日复用。无账号身份，换浏览器视为不同观测。公开分发前再按正式流量补充计量与清理策略。
+
+D1 收到的业务字段只有事件名、事件随机 ID、浏览器随机 ID 和批次。时间由数据库生成。未勾选时工作台照常使用。生产绑定由上线时配置。缺少绑定时，用户无法开启试用记录。

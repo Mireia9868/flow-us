@@ -106,9 +106,17 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
 .btn-lg{height:40px;padding:0 18px;border-radius:10px;font-size:14px;font-weight:560}
 .fc-none{text-align:center;padding:22px 12px;color:var(--tx3);font-size:14px}
 .fc-none svg{margin:0 auto 10px;opacity:.4}
+.first-task{display:grid;gap:10px;max-width:480px;margin:12px auto;text-align:left;color:var(--tx)}
+.first-task label{font-size:17px;font-weight:700}
+.first-task input{min-width:0;width:100%;font:inherit;padding:10px 12px;border:1px solid #c8cfda;border-radius:8px}
+.first-task button{justify-self:start}
+#pilotMetrics{max-width:42rem;margin:12px auto;color:var(--tx3);font-size:13px}
+#pilotMetrics label{display:flex;align-items:center;gap:6px;font-weight:600;color:var(--tx)}
+#pilotMetrics p{margin:4px 0}
 
 /* ---------- pomodoro ---------- */
 .pm{display:flex;align-items:center;gap:18px;padding:14px 0;border-top:1px solid var(--line2);margin-top:4px;flex-wrap:wrap}
+.pm[hidden]{display:none}
 .pm-ring{position:relative;width:88px;height:88px;flex-shrink:0}
 .pm-ring svg{transform:rotate(-90deg)}
 .pm-txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
@@ -136,7 +144,9 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
 .pl-tab{height:30px;padding:0 12px;border-radius:20px;background:var(--bg);border:1px solid transparent;font-size:13px;color:var(--tx2);font-weight:520;display:inline-flex;align-items:center;gap:6px}
 .pl-tab.on{background:var(--pri-l);border-color:#f6c3d8;color:var(--pri)}
 .pl-tab b{font-size:11px;opacity:.65;font-weight:600}
-.pl-b{padding:10px 12px 14px;max-height:520px;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:2px 14px;align-content:start}
+.pl-b{padding:10px 12px 14px;max-height:520px;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:2px 14px;align-content:start}
+.pl-tabs[hidden],.lf[hidden]{display:none}
+.pl-empty{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;padding:16px}
 .pi{display:flex;align-items:center;gap:10px;padding:11px 10px;border-radius:var(--r2);transition:.12s;cursor:pointer;border:1px solid transparent}
 .pi:hover{background:var(--bg)}
 .pi.on{background:var(--pri-l);border-color:#f6c3d8}
@@ -145,7 +155,8 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
 .pi-t.dn{text-decoration:line-through;color:var(--tx3);font-weight:400}
 .pi-s{display:flex;gap:6px;align-items:center;margin-top:3px;font-size:11.5px;color:var(--tx3);flex-wrap:wrap}
 .pi-a{display:flex;gap:5px;flex-shrink:0;opacity:0;transition:.15s}
-.pi:hover .pi-a,.pi.on .pi-a{opacity:1}
+.pi:hover .pi-a,.pi:focus-within .pi-a,.pi.on .pi-a{opacity:1}
+@media (hover:none){.pi-a{opacity:1}}
 .icb{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:var(--tx3);transition:.12s}
 .icb:hover{background:#e9ecf1;color:var(--tx)}
 .icb.del:hover{background:var(--red-l);color:var(--red)}
@@ -163,7 +174,7 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
 .bar-v{font-size:12px;color:var(--tx3);width:44px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums}
 
 /* ---------- line filter ---------- */
-.lf{display:flex;gap:6px;padding:0 14px 11px;flex-wrap:wrap;align-items:center}
+.lf{display:flex;gap:6px;padding:6px 14px 0;flex-wrap:wrap;align-items:center}
 .lf-l{font-size:11.5px;color:var(--tx3);margin-right:2px}
 .lf-b{height:26px;padding:0 10px;border-radius:16px;background:var(--bg);border:1px solid transparent;font-size:12px;color:var(--tx2);font-weight:520;display:inline-flex;align-items:center;gap:5px}
 .lf-b i{width:7px;height:7px;border-radius:2px;flex-shrink:0}
@@ -310,6 +321,12 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
   </div>
 
   
+<section id="pilotMetrics" hidden>
+  <label><input id="pilotConsent" type="checkbox" aria-describedby="pilotDescription">分享试用使用数据</label>
+  <p id="pilotDescription">用于衡量首次上手和复用。仅记录浏览器随机编号、试用批次、操作类型和时间。任务与笔记内容留在原有存储中。取消勾选后停止发送。试用报表使用最近 28 天的记录。</p>
+  <p id="pilotStatus" role="status"></p>
+</section>
+
   <!-- 当前专注（置顶固定） -->
 <section class="card focus-pin" data-page-node-id="x6e9AnQm5EEdkTOQGOoCmg">
         <div class="card-h" data-page-node-id="ydO0NYfvWCmLnnHBrTFk4K">
@@ -320,7 +337,7 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
         <div class="card-b" data-page-node-id="1zvaZ7JgMjD2X2rj2yV7FS">
           <div id="fcBox" data-page-node-id="rSBJqpcsrgCkbZ5UwwGAZU"></div>
 
-          <div class="pm" data-page-node-id="sIXzGoa2ZtqTD7gUFdvWm9">
+          <div class="pm" id="focusTimer" data-page-node-id="sIXzGoa2ZtqTD7gUFdvWm9">
             <div class="pm-ring" data-page-node-id="mfZWLYHfLbrMxvBzkjhTec">
               <svg width="88" height="88" viewBox="0 0 88 88" data-page-node-id="3WEvvjxo9XpuVk9ltdfsJR">
                 <circle cx="44" cy="44" r="38" fill="none" stroke="#e9ecf1" stroke-width="7" data-page-node-id="VBdkceEwRhjQWIqXGqAHp3"/>
@@ -340,7 +357,7 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
             </div>
           </div>
 
-          <div class="nt" data-page-node-id="EL9OnHQuaUyyJeJ4yKw7bC">
+          <div class="nt" id="focusProgress" data-page-node-id="EL9OnHQuaUyyJeJ4yKw7bC">
             <div class="nt-l" data-page-node-id="hk5d4nofG9y2ov4yFPxlXi">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="hJhJJTKuVxuHGIHLJ3brL1"><path d="M12 20h9" data-page-node-id="VIUfy04O8TSFHlYC8JWqC9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" data-page-node-id="jvvmW57UhCzaNHoQixwVna"/></svg>
               今日进展 · 下一步
@@ -370,8 +387,8 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
           <h2 data-page-node-id="NLuQ45nj3U4sBLo3ZCStIT">任务池 · 按场景</h2>
           <div class="r" data-page-node-id="66xEvtikRaXQIlSz0oKvgj" style="display:flex;align-items:center;gap:8px"><span class="tag p2" id="poolCnt" data-page-node-id="QxbLsYhMAWfpffb6PX60ue">0</span><button class="btn sm pri" id="btnAddPool">+ 新建任务</button></div>
         </div>
-        <div class="pl-tabs" id="plTabs" data-page-node-id="UAR1dQZP98V7yvQEqWQD85"></div>
-        <div class="lf" id="lfBar"></div>
+        <div class="pl-tabs" id="plTabs" role="group" aria-label="按场景筛选" data-page-node-id="UAR1dQZP98V7yvQEqWQD85"></div>
+        <div class="lf" id="lfBar" role="group" aria-label="按业务线筛选"></div>
         <div class="pl-b" id="plBody" data-page-node-id="A8ZQ6HvUOMl95BxAyPfdeB"></div>
       </section>
 
@@ -464,7 +481,7 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
     <div class="fm" data-page-node-id="4M166p6UgZDvdaZRnjPwXd">
       <div class="f1" data-page-node-id="xqJS4yIDcv5c4VKs2Is9Jf">
         <label data-page-node-id="za4RQTvymjmigqDdpFCPW6">任务名称 *</label>
-        <input id="fTask" type="text" placeholder="例如：Garvee MS Ads 转化修复跟进" data-page-node-id="QeXeW9LfVIqYFcWldymeL4">
+        <input id="fTask" type="text" placeholder="例如：确认上周广告花费变化" data-page-node-id="QeXeW9LfVIqYFcWldymeL4">
       </div>
       <div data-page-node-id="kGXZMnpWBHqQcxan4BQHnV">
         <label data-page-node-id="oD6PthSq9wH3iwvW1Pc3QY">场景</label>
@@ -578,6 +595,10 @@ input,select,textarea{font-family:inherit;font-size:16px;color:var(--tx)}
 "use strict";
 /* ========== 常量与状态 ========== */
 var LS = "wb_focusdesk_";
+var pilotCohort = new URLSearchParams(location.search).get("pilot");
+var pilot = null;
+var pilotHit = false;
+var pilotChoice = LS+"pilot";
 var SCENES = ["投放执行","数据分析诊断","周报汇报","对外沟通","个人项目"];
 var SC_COLOR = {"投放执行":"#2f6bff","数据分析诊断":"#7c3aed","周报汇报":"#f59e0b","对外沟通":"#16a34a","个人项目":"#e5484d"};
 var LINES = ["Readdy-GG","Readdy-其他","个人项目"];
@@ -629,6 +650,71 @@ function confirmBox(title,msg,fn){
 $("cfNo").onclick=function(){ $("mConf").classList.remove("on"); };
 $("mConf").onclick=function(e){ if(e.target===this) this.classList.remove("on"); };
 $("mAdd").onclick=function(e){ if(e.target===this) this.classList.remove("on"); };
+
+/* ========== 试用数据（用户勾选后才发送） ========== */
+function pilotEvent(event){
+  if(!pilot) return Promise.resolve(false);
+  return fetch("/api/pilot-events", {
+    method:"POST", credentials:"omit", referrerPolicy:"origin", keepalive:true,
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({event:event, eventId:crypto.randomUUID(), visitorId:pilot.visitorId, cohort:pilot.cohort})
+  }).then(function(response){ return response.status===204; }).catch(function(){ return false; });
+}
+
+function initPilot(){
+  var saved;
+  try{ saved=JSON.parse(localStorage.getItem(pilotChoice)||"null"); }catch(e){}
+  var invited=pilotCohort==="growth" || pilotCohort==="qa";
+  if(!invited && !saved) return;
+  if(saved && saved.enabled) pilot=saved;
+  $("pilotMetrics").hidden=false;
+  $("pilotConsent").checked=!!pilot;
+  if(pilot) pilotEvent("app_opened");
+  window.addEventListener("storage",function(event){
+    if(event.key!==pilotChoice && event.key!==null) return;
+    try{ saved=JSON.parse(localStorage.getItem(pilotChoice)||"null"); }catch(e){ saved=null; }
+    pilot=saved && saved.enabled ? saved : null;
+    $("pilotConsent").checked=!!pilot;
+  });
+  $("pilotConsent").onchange=async function(){
+    var input=this;
+    var status=$("pilotStatus");
+    if(!input.checked){
+      pilot=null;
+      saved={...saved,enabled:false};
+      localStorage.setItem(pilotChoice,JSON.stringify(saved));
+      status.textContent="已停止发送试用数据。";
+      return;
+    }
+    input.disabled=true;
+    try{
+      var enrollment={
+        visitorId:saved?.visitorId || crypto.randomUUID(),
+        cohort:saved?.cohort || pilotCohort,
+        enabled:true
+      };
+      pilot=enrollment;
+      if(!await pilotEvent("app_opened")) throw new Error("pilot unavailable");
+      localStorage.setItem(pilotChoice,JSON.stringify(enrollment));
+      saved=enrollment;
+      status.textContent="已开启试用数据记录。";
+    }catch(e){
+      pilot=null;
+      input.checked=false;
+      status.textContent="试用数据暂不可用。你仍可以正常使用工作台。";
+    }finally{ input.disabled=false; }
+  };
+}
+
+function pilotTaskEvent(event,task){
+  if(!task) return;
+  // 旧版已存在于设备上的内置样例，不参与试用统计。
+  var examples = [
+    "Readdy GG 搜索词报告清理 + 否定词补录", "Readdy GG PMax 素材组轮换（3 组新图 + 标题）",
+    "Readdy 本周 WoW 复盘（费用 / Leads / CPL）", "Readdy CPL 落地页 CAPI 事件质量核对", "AI GeoLens 支付校验修复"
+  ];
+  if(!examples.includes(task["任务"])) pilotEvent(event);
+}
 
 /* ========== 计算层 ========== */
 function isDone(t){ return t["状态"]==="已完成"; }
@@ -696,7 +782,7 @@ function renderToday(){
     var oa=isOverdue(a)?0:1, ob=isOverdue(b)?0:1;
     if(oa!==ob) return oa-ob;
     var pa={"P0":0,"P1":1,"P2":2};
-    return (pa[a["优先级"]]||9)-(pa[b["优先级"]]||9);
+    return (pa[a["优先级"]]??9)-(pa[b["优先级"]]??9);
   });
   var od=list.filter(isOverdue).length;
   var c=$("todayCnt");
@@ -736,6 +822,20 @@ function renderFocus(){
   var box=$("fcBox");
   var t=null;
   for(var i=0;i<state.tasks.length;i++){ if(state.tasks[i]._id===state.curId){ t=state.tasks[i]; break; } }
+  var needsFirstTask=!state.tasks.length;
+  $("focusTimer").hidden=needsFirstTask;
+  $("focusProgress").hidden=needsFirstTask;
+  if(!t && needsFirstTask){
+    if(!$("firstTask")){
+      box.innerHTML='<form class="first-task" id="firstTask">'
+        +'<label for="firstTaskName">今天最重要的一件事是什么？</label>'
+        +'<input id="firstTaskName" placeholder="例如：查清上周广告花费为什么上涨" required maxlength="120">'
+        +'<button type="submit" class="btn pri">开始专注</button></form>';
+      $("firstTask").onsubmit=startFirstTask;
+    }
+    $("fcSc").textContent="—";
+    return;
+  }
   if(!t){
     box.innerHTML='<div class="fc-none">'
       +'<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>'
@@ -753,8 +853,6 @@ function renderFocus(){
   var rawNote=String(t["备注"]||"").split("\n[进展]")[0];
   if(rawNote) h+='<div class="fc-p">'+esc(rawNote)+'</div>';
   h+='<div class="fc-act">'
-    +'<button class="btn pri btn-lg" data-act="start" data-id="'+t._id+'">'
-    +'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l14 8-14 8V4z"/></svg>开始推进</button>'
     +'<button class="btn btn-lg" data-act="done" data-id="'+t._id+'">标记完成</button>'
     +'<button class="btn btn-lg" data-act="drop" data-id="'+t._id+'">取消专注</button>'
     +'</div>';
@@ -763,22 +861,37 @@ function renderFocus(){
   $("noteHint").textContent = t._noteAt ? ("上次保存 " + t._noteAt) : "";
 }
 
-function renderPool(){
-  var tabs=$("plTabs"), body=$("plBody");
-  var cnt={}; SCENES.forEach(function(s){cnt[s]=0;});
-  state.tasks.forEach(function(t){ var s=t["场景"]; if(cnt[s]!=null) cnt[s]++; });
-  var th='<button class="pl-tab'+(state.scene==="全部"?" on":"")+'" data-sc="全部">全部 <b>'+state.tasks.length+'</b></button>';
-  SCENES.forEach(function(s){
-    th+='<button class="pl-tab'+(state.scene===s?" on":"")+'" data-sc="'+s+'">'+s+' <b>'+cnt[s]+'</b></button>';
-  });
-  tabs.innerHTML=th;
+function taskLine(task){ return task["业务线"] || "未分类"; }
 
-  var list = state.tasks.filter(function(t){
-    var okS = (state.scene==="全部") || (t["场景"]===state.scene);
-    var okL = (state.line==="全部") || ((t["业务线"]||"其他")===state.line);
-    return okS && okL;
-  });
-  list = list.slice().sort(function(a,b){
+function renderPool(){
+  var tabs=$("plTabs"), body=$("plBody"), bar=$("lfBar");
+  var all=state.tasks;
+  var lineNames=Array.from(new Set(all.map(taskLine)));
+  if(state.line!=="全部" && !lineNames.includes(state.line)) state.line="全部";
+
+  var byLine=all.filter(function(t){ return state.line==="全部" || taskLine(t)===state.line; });
+  var byScene=all.filter(function(t){ return state.scene==="全部" || t["场景"]===state.scene; });
+  var list=byLine.filter(function(t){ return state.scene==="全部" || t["场景"]===state.scene; });
+  tabs.hidden=!all.length;
+  bar.hidden=!lineNames.some(function(line){ return line!=="未分类"; });
+
+  tabs.innerHTML=["全部"].concat(SCENES).map(function(scene){
+    var selected=state.scene===scene;
+    var count=scene==="全部" ? byLine.length : byLine.filter(function(t){ return t["场景"]===scene; }).length;
+    return '<button class="pl-tab'+(selected?' on':'')+'" data-sc="'+scene+'" aria-pressed="'+selected+'">'+scene+' <b>'+count+'</b></button>';
+  }).join("");
+
+  var orderedLines=LINES.filter(function(line){ return lineNames.includes(line); })
+    .concat(lineNames.filter(function(line){ return !LINES.includes(line); }));
+  bar.innerHTML='<span class="lf-l">业务线</span>'+["全部"].concat(orderedLines).map(function(line){
+    var selected=state.line===line;
+    var count=line==="全部" ? byScene.length : byScene.filter(function(t){ return taskLine(t)===line; }).length;
+    var dot=line==="全部" ? "" : '<i style="background:'+(LN_COLOR[line]||"#8b95a3")+'"></i>';
+    return '<button class="lf-b'+(selected?' on':'')+'" data-ln="'+esc(line)+'" aria-pressed="'+selected+'">'
+      +dot+esc(line)+' <b>'+count+'</b></button>';
+  }).join("");
+
+  list.sort(function(a,b){
     var da=isDone(a)?1:0, db2=isDone(b)?1:0;
     if(da!==db2) return da-db2;
     var oa=isOverdue(a)?0:1, ob=isOverdue(b)?0:1;
@@ -789,7 +902,9 @@ function renderPool(){
   $("poolCnt").textContent=list.length+" 项";
 
   if(!list.length){
-    body.innerHTML='<div class="empty">该场景下暂无任务，点右上角「新建任务」添加</div>';
+    body.innerHTML=all.length
+      ? '<div class="empty pl-empty"><span>当前筛选下没有任务</span><button class="btn sm" id="clearPoolFilters">清除筛选</button></div>'
+      : '<div class="empty pl-empty">还没有任务。点击「新建任务」添加第一项。</div>';
     return;
   }
   var h="";
@@ -803,7 +918,7 @@ function renderPool(){
       +'<div class="pi-s">'
       +'<span class="tag '+String(t["优先级"]||"P2").toLowerCase()+'">'+esc(t["优先级"]||"P2")+'</span>'
       +(od?'<span class="tag od">逾期</span>':'')
-      +lineTag(t["业务线"])
+      +lineTag(taskLine(t))
       +'<span>'+dt+'</span>'
       +'</div></div>'
       +'<div class="pi-a">'
@@ -812,20 +927,6 @@ function renderPool(){
       +'</div></div>';
   });
   body.innerHTML=h;
-}
-
-/* —— 业务线筛选条（第二维度） —— */
-function renderLines(){
-  var bar=$("lfBar");
-  var cnt={};
-  state.tasks.forEach(function(t){ var l=t["业务线"]||"其他"; cnt[l]=(cnt[l]||0)+1; });
-  var h='<span class="lf-l">业务线</span>';
-  h+='<button class="lf-b'+(state.line==="全部"?" on":"")+'" data-ln="全部">全部 <b style="font-weight:600;opacity:.7">'+state.tasks.length+'</b></button>';
-  LINES.forEach(function(l){
-    if(!cnt[l]) return;
-    h+='<button class="lf-b'+(state.line===l?" on":"")+'" data-ln="'+l+'"><i style="background:'+(LN_COLOR[l]||"#8b95a3")+'"></i>'+l+' <b style="font-weight:600;opacity:.7">'+cnt[l]+'</b></button>';
-  });
-  bar.innerHTML=h;
 }
 
 /* —— 日历热力图（近 15 周专注分钟） —— */
@@ -945,7 +1046,6 @@ function renderPm(){
 function refreshAll(){
   renderToday();
   renderFocus();
-  renderLines();
   renderPool();
   renderStats();
   renderHeat();
@@ -1061,7 +1161,7 @@ function fetchData(){
   });
 }
 
-function pushTask(props, id){
+function pushTask(props, id, focusNow){
   var p={};
   for(var k in props){ if(props[k]!==undefined && props[k]!==null) p[k]=props[k]; }
   if(id){
@@ -1072,6 +1172,8 @@ function pushTask(props, id){
     var o={_id:"l_"+Date.now()+"_"+Math.random().toString(36).slice(2,7)};
     for(var k3 in p){ o[k3]=unwrap(p[k3]); }
     state.tasks.push(o);
+    if(focusNow) state.curId=o._id;
+    pilotTaskEvent("task_created",o);
   }
   return commit();
 }
@@ -1207,6 +1309,7 @@ function onAct(e){
     var t=findT(id);
     if(!t) return;
     var nv = isDone(t) ? "待办":"已完成";
+    if(nv==="已完成") pilotTaskEvent("task_completed",t);
     pushTask({"状态":{select:nv}},id).then(function(){
       t["状态"]=nv;
       if(nv==="已完成" && state.curId===id){
@@ -1226,9 +1329,6 @@ function onAct(e){
       pushTask({"状态":{select:"进行中"}},id).then(function(){ t2["状态"]="进行中"; saveLocal(); refreshAll(); }).catch(function(){ refreshAll(); });
     }else{ refreshAll(); }
     if(window.innerWidth<900) window.scrollTo({top:document.querySelector(".tabs-sec").offsetTop-14,behavior:"smooth"});
-  }
-  else if(act==="start"){
-    pmSet(state.pm.min); pmToggle();
   }
   else if(act==="drop"){
     state.curId=""; localStorage.setItem(LS+"cur","");
@@ -1251,17 +1351,33 @@ function findT(id){
 }
 
 document.addEventListener("click", function(e){
+  if(e.target.closest("#clearPoolFilters")){
+    state.scene=state.line="全部";
+    renderPool();
+    $("plTabs").querySelector(".on").focus();
+    return;
+  }
   if(e.target.closest("#todayList") || e.target.closest("#fcBox") || e.target.closest("#plBody")){ onAct(e); return; }
   var tab=e.target.closest(".pl-tab");
-  if(tab){ state.scene=tab.getAttribute("data-sc"); renderPool(); return; }
+  if(tab){
+    state.scene=tab.getAttribute("data-sc");
+    renderPool();
+    $("plTabs").querySelector(".on").focus();
+    return;
+  }
   var ln=e.target.closest(".lf-b");
-  if(ln){ state.line=ln.getAttribute("data-ln"); renderLines(); renderPool(); return; }
+  if(ln){
+    state.line=ln.getAttribute("data-ln");
+    renderPool();
+    $("lfBar").querySelector(".on").focus();
+    return;
+  }
   var mn=e.target.closest(".mini");
   if(mn){ pmSet(parseInt(mn.getAttribute("data-min"),10)); return; }
 });
 
 /* 番茄钟（基于真实时间戳，切到后台也不会少算时间） */
-function pmSet(m){ state.pm.min=m; state.pm.left=m*60; state.pm.run=false; state.pm.endTs=0; clearInterval(state.pm.timer); pmWorkerSet(0); renderPm(); }
+function pmSet(m){ pilotHit=false; state.pm.min=m; state.pm.left=m*60; state.pm.run=false; state.pm.endTs=0; clearInterval(state.pm.timer); pmWorkerSet(0); renderPm(); }
 function pmRemaining(){ return Math.max(0, Math.round((state.pm.endTs - Date.now())/1000)); }
 /* 后台静默计时：页面隐藏后主线程 setInterval 会被浏览器节流到约 1 次/分钟，
    这里用一个 Blob Worker（Worker 定时器不受页面可见性节流）盯真实结束时间戳，
@@ -1299,6 +1415,7 @@ function pmNotify(){
 }
 function pmFinish(){
   if(!state.pm.run) return;
+  pilotQualifyFocus(0);
   clearInterval(state.pm.timer); state.pm.run=false; state.pm.left=0; state.pm.endTs=0; pmWorkerSet(0);
   var t=findT(state.curId);
   pushFocus({"日期":{date:today()},"任务":{text:t?t["任务"]:"（未指定）"},"场景":{select:(t&&t["场景"])||"投放执行"},"专注分钟":{number:state.pm.min},"备注":{text:"番茄钟完成"}})
@@ -1310,20 +1427,33 @@ function pmFinish(){
   state.pm.left=state.pm.min*60;
   renderPm();
 }
+function pilotQualifyFocus(remaining){
+  if(pilotHit || state.pm.min*60-remaining<300) return;
+  pilotHit=true;
+  pilotTaskEvent("focus_qualified",findT(state.pm.taskId));
+}
+
 function pmTick(){
   if(!state.pm.run) return;
   state.pm.left = pmRemaining();
+  pilotQualifyFocus(state.pm.left);
   if(state.pm.left<=0){ pmFinish(); return; }
   renderPm();
 }
-function pmToggle(){
+function pmToggle(skipNotification){
   if(state.pm.run){
     state.pm.left = pmRemaining();
+    pilotQualifyFocus(state.pm.left);
     state.pm.run=false; clearInterval(state.pm.timer); state.pm.endTs=0; pmWorkerSet(0); renderPm(); return;
   }
   if(!state.curId){ toast("请先选一个专注任务"); return; }
   /* 首次启动时申请系统通知权限（必须由用户点击触发） */
-  try{ if(window.Notification&&Notification.permission==="default"){ Notification.requestPermission(); } }catch(e){}
+  try{ if(skipNotification!==true && window.Notification&&Notification.permission==="default"){ Notification.requestPermission(); } }catch(e){}
+  if(state.pm.left===state.pm.min*60){
+    state.pm.taskId=state.curId;
+    pilotHit=false;
+    pilotTaskEvent("focus_started",findT(state.curId));
+  }
   state.pm.run=true;
   state.pm.endTs = Date.now() + state.pm.left*1000;
   state.pm.timer=setInterval(pmTick,1000);
@@ -1360,10 +1490,25 @@ $("noteSave").onclick=function(){
   pushTask({"备注":{text: base + MARK + " " + stamp + " " + v}}, t._id).catch(function(){});
   t["备注"]= base + MARK + " " + stamp + " " + v;
   $("noteHint").textContent="已保存 "+stamp;
+  if(v.trim()) pilotTaskEvent("task_result_saved",t);
   toast("进展已保存");
 };
 
 /* 新建任务 */
+function startFirstTask(event){
+  event.preventDefault();
+  var input=$("firstTaskName");
+  var name=input.value.trim();
+  if(!name){ input.focus(); return; }
+  pushTask({
+    "任务":name, "场景":"投放执行", "状态":"进行中", "优先级":"P1", "今日处理":true
+  }, null, true);
+  refreshAll();
+  pmSet(state.pm.min);
+  pmToggle(true);
+  $("pmStart").focus();
+}
+
 $("btnAdd").onclick=function(){ $("fDue").value=today(); $("fPrj").innerHTML=prjOptHTML(""); $("mAdd").classList.add("on"); };
 $("btnAddPool").onclick=$("btnAdd").onclick;
 $("fCancel").onclick=function(){ $("mAdd").classList.remove("on"); };
@@ -1384,6 +1529,8 @@ $("fSave").onclick=function(){
   if(!props["截止日期"].date) delete props["截止日期"];
   $("mAdd").classList.remove("on");
   pushTask(props).then(function(){
+    if(state.scene!=="全部" && state.scene!==props["场景"].select) state.scene="全部";
+    if(state.line!=="全部" && state.line!==(props["业务线"].select||"未分类")) state.line="全部";
     $("fTask").value=""; $("fNote").value="";
     return fetchData();
   }).then(function(){ refreshAll(); toast("任务已创建"); })
@@ -1563,7 +1710,6 @@ $("scSave").onclick=function(){
   $("mSync").classList.remove("on");
   pullRemote().then(function(){
     refreshAll();
-    if(!state.tasks.length){ seedLocal(); refreshAll(); }
     return commit();
   }).then(function(){ toast("已开启云同步"); })
     .catch(function(){
@@ -1574,7 +1720,7 @@ $("scSave").onclick=function(){
 
 /* ========== 初始化（防御性：单一入口） ========== */
 function initSelects(){
-  var opt=LINES.map(function(l){ return '<option value="'+l+'">'+l+'</option>'; }).join("");
+  var opt='<option value="">未分类</option>'+LINES.map(function(l){ return '<option value="'+l+'">'+l+'</option>'; }).join("");
   $("fLine").innerHTML=opt;
 }
 
@@ -1583,8 +1729,6 @@ function init(){
   var d=loadLocal();
   state.tasks=d.t; state.focus=d.f; state.wow=d.w; state.projects=d.prj||[]; state.curId=d.cur;
   refreshAll();                                  // 先用本地缓存渲染，避免白屏
-  if(!state.tasks.length){ seedLocal(); refreshAll(); }
-  if(!state.projects.length){ seedProjects(); refreshAll(); }
   if(!state.curId){ var l=todayTasks(); if(l.length) state.curId=l[0]._id; refreshAll(); }
 
   if(hasSync()){
@@ -1603,45 +1747,7 @@ function init(){
     $("bn").classList.add("on");
   }
   renderSyncCfg();
-}
-
-/* 首次打开播撒示例任务（含 1 条逾期），可一键清空 */
-function seedLocal(){
-  var td=today();
-  var mk=function(n,sc,pr,due,td2,note,st,line,prj){
-    return {_id:"l_"+Math.random().toString(36).slice(2,9),"任务":n,"场景":sc,"状态":st||"待办","优先级":pr,"截止日期":due,"今日处理":td2,"业务线":line,"项目":prj||"","备注":note};
-  };
-  var y=new Date(); y.setDate(y.getDate()-2);
-  var ys=y.getFullYear()+"-"+p2(y.getMonth()+1)+"-"+p2(y.getDate());
-  state.tasks=[
-    mk("Readdy GG 搜索词报告清理 + 否定词补录","数据分析诊断","P0",ys,true,"搜索词里无效词占比偏高，需补否定词并核对归因","进行中","Readdy-GG","Readdy GG 冷启动"),
-    mk("Readdy GG PMax 素材组轮换（3 组新图 + 标题）","投放执行","P0",td,true,"素材轮换周期到，含 freewebsite 落地页配套文案","待办","Readdy-GG","Readdy GG 冷启动"),
-    mk("Readdy 本周 WoW 复盘（费用 / Leads / CPL）","周报汇报","P1",td,true,"对比上周，标注异动与判断","待办","Readdy-GG","Readdy GG 冷启动"),
-    mk("Readdy CPL 落地页 CAPI 事件质量核对","对外沟通","P1",shiftDay(td,2),false,"event match quality 偏低，与工程确认参数回传","待办","Readdy-GG","Readdy GG 冷启动"),
-    mk("AI GeoLens 支付校验修复","个人项目","P2",shiftDay(td,5),false,"PayPal Live 环境变量配置 + 免费后门修复","待办","个人项目","AI GeoLens 支付闭环")
-  ];
-  state.curId=state.tasks[0]._id;
-  saveLocal();
-}
-
-/* 首次打开播撒示例项目（含阶段与成功标准），可一键清空 */
-function seedProjects(){
-  var td=today();
-  var mkp=function(n,arr,cur,due,goal){
-    return {_id:"q_"+Math.random().toString(36).slice(2,7),"名称":n,"阶段":arr,"当前阶段":cur,"目标日期":due,"成功标准":goal};
-  };
-  state.projects=[
-    mkp("Readdy GG 冷启动",
-        ["关键词清单 + 落地页就绪","小预算测试 $20/天","放量到 $100/天","四周复盘定策略"],
-        2, shiftDay(td,21), "CPL ≤ $8 且周 Leads ≥ 60，连续 2 周达标"),
-    mkp("AI GeoLens 支付闭环",
-        ["接入 PayPal Live 环境变量","修 /api/analyze 免鉴权漏洞","上线付费套餐并验证一笔真实订单"],
-        1, shiftDay(td,12), "完成 1 笔真实付费订单，免费调用不再可用"),
-    mkp("flow-us 工作台建设",
-        ["数据云同步打通","项目进度模块上线","移动端日常使用习惯养成"],
-        2, shiftDay(td,10), "连续 7 天每天录入，打开即用不漏任务")
-  ];
-  saveLocal();
+  initPilot();
 }
 
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", init);
